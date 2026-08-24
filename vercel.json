@@ -1,0 +1,34 @@
+{
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "owl.overwatchlabs.dev" }],
+      "destination": "/products/owl/:path*"
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "omniark.overwatchlabs.dev" }],
+      "destination": "/products/omniark/:path*"
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "ark.overwatchlabs.dev" }],
+      "destination": "/products/ark/:path*"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "owl.overwatchlabs.dev" }],
+      "destination": "/products/owl"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "omniark.overwatchlabs.dev" }],
+      "destination": "/products/omniark"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "ark.overwatchlabs.dev" }],
+      "destination": "/products/ark"
+    }
+  ]
+}
