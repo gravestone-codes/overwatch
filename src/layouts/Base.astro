@@ -1,6 +1,7 @@
 ---
 import "@styles/global.css";
 import WaitlistModal from "@components/WaitlistModal.astro";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   title?: string;
@@ -26,6 +27,7 @@ const {
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    <Analytics />
     <script is:inline>
       if (localStorage.getItem("owl-theme") === "light") {
         document.documentElement.dataset.theme = "light";

@@ -5,7 +5,11 @@ import vercel from "@astrojs/vercel";
 export default defineConfig({
   site: "https://overwatchlabs.dev",
   output: "static",
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
   vite: {
     plugins: [tailwindcss()],
   },
