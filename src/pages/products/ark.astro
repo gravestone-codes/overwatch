@@ -188,7 +188,7 @@ KEEP_DOTS.forEach(([x, y], i) => {
             aria-hidden="true"
           >
           </div>
-          <div id="ark-grid" class="absolute inset-0">
+          <div id="ark-grid" class="absolute inset-0" data-outline={JSON.stringify(POLY)}>
             {
               KEEP_DOTS.map(([x, y], i) => {
                 const left = ((x / 256) * 100).toFixed(2);
@@ -315,11 +315,32 @@ KEEP_DOTS.forEach(([x, y], i) => {
         y: parseFloat(n.dataset.y!) / 100,
       }));
       const RADIUS = 0.17;
+
+      // perimeter path for the autonomous loop (touch devices)
+      const outline: [number, number][] = JSON.parse(
+        (grid as HTMLElement).dataset.outline || "[]",
+      );
+      const samples: [number, number][] = [];
+      for (let i = 0; i < outline.length; i++) {
+        const [ax, ay] = outline[i];
+        const [bx, by] = outline[(i + 1) % outline.length];
+        const steps = Math.max(1, Math.round(Math.hypot(bx - ax, by - ay) / 6));
+        for (let k = 0; k < steps; k++) {
+          samples.push([
+            (ax + ((bx - ax) * k) / steps) / 256,
+            (ay + ((by - ay) * k) / steps) / 256,
+          ]);
+        }
+      }
+
+      const coarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
       let tx = 0.5;
-      let ty = 2;
+      let ty = 0.4;
       let cx = 0.5;
-      let cy = 2;
-      let raf = 0;
+      let cy = 0.4;
+      let s = 0;
+      let userUntil = 0;
+      let last = performance.now();
 
       const paint = () => {
         const r = grid.getBoundingClientRect();
@@ -340,24 +361,34 @@ KEEP_DOTS.forEach(([x, y], i) => {
         }
       };
 
-      const tick = () => {
-        cx += (tx - cx) * 0.14;
-        cy += (ty - cy) * 0.14;
+      const frame = (now: number) => {
+        const dt = Math.min(50, now - last);
+        last = now;
+        if (coarse && now > userUntil && samples.length) {
+          s = (s + dt * 0.00035) % 1;
+          const p = samples[Math.floor(s * samples.length)];
+          tx = p[0];
+          ty = p[1];
+        }
+        cx += (tx - cx) * 0.12;
+        cy += (ty - cy) * 0.12;
         paint();
-        raf = requestAnimationFrame(tick);
+        requestAnimationFrame(frame);
       };
+      requestAnimationFrame(frame);
 
-      grid.addEventListener("mousemove", (e) => {
-        const r = grid.getBoundingClientRect();
-        tx = (e.clientX - r.left) / r.width;
-        ty = (e.clientY - r.top) / r.height;
+      const pointer = (e: Event) => {
         document.getElementById("ark-ping")?.remove();
-        if (!raf) raf = requestAnimationFrame(tick);
-      });
-
-      grid.addEventListener("mouseleave", () => {
-        ty = 2;
-      });
+        const r = grid.getBoundingClientRect();
+        const p = "touches" in e ? e.touches[0] : (e as MouseEvent);
+        if (!p) return;
+        tx = (p.clientX - r.left) / r.width;
+        ty = (p.clientY - r.top) / r.height;
+        userUntil = performance.now() + 2500;
+      };
+      grid.addEventListener("mousemove", pointer);
+      grid.addEventListener("touchstart", pointer, { passive: true });
+      grid.addEventListener("touchmove", pointer, { passive: true });
     }
   </script>
 </Base>
