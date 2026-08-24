@@ -1,0 +1,41 @@
+---
+import Logo from "@components/Logo.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="hairline-t">
+  <div
+    class="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-14 md:flex-row md:items-start md:justify-between"
+  >
+    <div class="flex items-center gap-3">
+      <Logo size={34} />
+      <div>
+        <p class="font-display text-sm font-semibold tracking-[0.24em] text-fog">
+          OVERWATCH LABS
+        </p>
+        <p class="mt-1 text-xs text-dim">Systems that observe, protect, endure.</p>
+      </div>
+    </div>
+
+    <nav class="grid grid-cols-2 gap-x-16 gap-y-3 text-[13px]" aria-label="Footer">
+      <a href="/products/owl" class="text-mute transition-colors hover:text-fog">OWL</a>
+      <a href="/products/omniark" class="text-mute transition-colors hover:text-fog">OmniArk</a>
+      <a href="/products/ark" class="text-mute transition-colors hover:text-fog">Ark</a>
+      <a href="/#services" class="text-mute transition-colors hover:text-fog">Services</a>
+      <a href="/#principles" class="text-mute transition-colors hover:text-fog">Principles</a>
+      <a href="mailto:info@overwatchlabs.dev" class="text-mute transition-colors hover:text-fog"
+        >info@overwatchlabs.dev</a
+      >
+    </nav>
+  </div>
+
+  <div class="hairline-t">
+    <div
+      class="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-dim md:flex-row md:items-center md:justify-between"
+    >
+      <p>&copy; {year} Overwatch Labs. All rights reserved.</p>
+      <p>overwatchlabs.dev</p>
+    </div>
+  </div>
+</footer>

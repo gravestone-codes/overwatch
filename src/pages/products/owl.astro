@@ -1,0 +1,377 @@
+---
+import Base from "@layouts/Base.astro";
+import ProductNav from "@components/ProductNav.astro";
+import Footer from "@components/Footer.astro";
+
+const vendors = [
+  "Cisco", "Juniper", "Fortinet", "Huawei", "MikroTik",
+  "Cumulus", "Sophos", "A10", "ZTE",
+];
+
+const rows = [
+  {
+    n: "01",
+    title: "Backup without blind spots",
+    body: "Scheduled and on-demand captures across nine platforms. Secrets masked where they are read, complete artifacts sealed where they are stored. A version is restorable only when the full artifact exists, and OWL refuses anything less.",
+  },
+  {
+    n: "02",
+    title: "Drift, the moment it happens",
+    body: "Every capture is diffed against the last known state. A changed line on a border firewall becomes an event with the exact lines that moved, not a ticket you find next quarter.",
+  },
+  {
+    n: "03",
+    title: "Compliance that is earned",
+    body: "NCSA controls are always on. ISO 27001:2022 and PCI DSS v4.0 packs sit on top. Scores come from the actual bytes running on your devices, evaluated by a pure, inspectable rules engine. Unlicensed devices are reported as not assessed, never as a fake pass.",
+  },
+  {
+    n: "04",
+    title: "A record that cannot be rewritten",
+    body: "The audit chain is hash-chained and append-only, enforced at the database role level. Updates and deletes are revoked, not discouraged. It verifies itself every six hours and says so.",
+  },
+  {
+    n: "05",
+    title: "One write, and it self-heals",
+    body: "The only thing OWL ever writes to a device is a rollback. It applies armed, reconnects with fresh credentials to prove you are not locked out, and only then confirms. If the restore broke something, the device reverts itself.",
+  },
+  {
+    n: "06",
+    title: "Credentials that behave",
+    body: "An envelope-encrypted vault holds device secrets. The engine receives short-lived credentials over mutual TLS, uses them, and holds nothing. Long-lived secrets on backup workers are how breaches start.",
+  },
+];
+
+const pack = [
+  "report.pdf",
+  "manifest.oscal.json",
+  "config-hashes/",
+  "audit-chain.jsonl",
+  "attestations/",
+  "SHA256SUMS",
+  "signature.ed25519",
+];
+---
+
+<Base
+  title="OWL · Network Configuration Governance · Overwatch Labs"
+  description="OWL observes and governs network device configuration: multi-vendor backup, drift detection, compliance scoring, tamper-evident audit, and safety-first rollback."
+>
+  <ProductNav name="OWL" />
+
+  <main class="font-body">
+    <section class="relative overflow-hidden">
+      <div
+        class="pointer-events-none absolute inset-0"
+        style="background: radial-gradient(ellipse 55% 45% at 72% 30%, rgba(255, 255, 255, 0.05), transparent 65%);"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative mx-auto max-w-6xl px-6 pt-36 pb-28 md:pt-44">
+        <div class="grid items-center gap-16 lg:grid-cols-2">
+          <div>
+            <h1
+              data-reveal
+              style="--reveal-delay: 100ms"
+              class="font-serif text-6xl leading-[0.98] font-normal tracking-tight text-fog md:text-7xl"
+            >
+              The state of your network, provable.
+            </h1>
+            <p
+              data-reveal
+              style="--reveal-delay: 200ms"
+              class="mt-7 max-w-md text-[15px] leading-relaxed text-mute"
+            >
+              OWL backs up every configuration, scores it against the controls
+              your auditors already know, and keeps a record nobody can quietly
+              rewrite.
+            </p>
+            <div data-reveal style="--reveal-delay: 300ms" class="mt-9 flex items-center gap-6">
+              <button
+                  type="button"
+                  data-waitlist="OWL"
+                  class="rounded-lg bg-fog px-5 py-2.5 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+              >
+  Join waitlist
+              </button>
+              <a href="#governance" class="link-underline text-sm font-medium text-mute hover:text-fog">
+                How it governs
+              </a>
+            </div>
+          </div>
+
+          <div data-reveal style="--reveal-delay: 250ms" class="relative hidden justify-center lg:flex">
+            <div
+              class="pointer-events-none absolute inset-0 scale-125"
+              style="background: radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.07), transparent 55%);"
+              aria-hidden="true"
+            >
+            </div>
+            <div class="relative">
+              <div id="rook-canvas" class="h-[440px] w-[440px] max-w-full"></div>
+              <div
+                class="absolute -bottom-2 left-1/2 h-10 w-3/4 -translate-x-1/2 rounded-full bg-black/50 blur-2xl"
+                aria-hidden="true"
+              >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div data-reveal style="--reveal-delay: 420ms" class="mt-24 border-t border-line pt-10">
+          <p class="text-[11px] font-medium tracking-[0.22em] text-dim uppercase">
+            Works with the gear you already run
+          </p>
+          <div class="mt-5 flex flex-wrap gap-x-8 gap-y-3">
+            {
+              vendors.map((v) => (
+                <span class="text-sm font-medium text-mute">{v}</span>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="governance" class="hairline-t scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-6 py-28">
+        <h2 data-reveal class="max-w-xl font-serif text-4xl leading-tight text-fog md:text-5xl">
+          Governance is what it refuses to do.
+        </h2>
+        <p data-reveal style="--reveal-delay: 100ms" class="mt-6 max-w-xl text-[15px] leading-relaxed text-mute">
+          Tools that push configuration hold your network hostage to their own
+          bugs. OWL takes the other side of that trade: total visibility, one
+          carefully guarded write.
+        </p>
+
+        <div class="mt-20">
+          {
+            rows.map((r) => (
+              <div data-reveal class="grid gap-4 border-t border-line py-10 md:grid-cols-12 md:gap-10">
+                <span class="font-mono text-[12px] text-dim md:col-span-1">{r.n}</span>
+                <h3 class="font-display text-lg font-semibold tracking-tight text-fog md:col-span-4">
+                  {r.title}
+                </h3>
+                <p class="text-sm leading-relaxed text-mute md:col-span-7">{r.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="evidence" class="hairline-t scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-6 py-28">
+        <div class="grid items-start gap-14 lg:grid-cols-2">
+          <div>
+            <h2 data-reveal class="max-w-md font-serif text-4xl leading-tight text-fog md:text-5xl">
+              Evidence your auditor can hold.
+            </h2>
+            <p data-reveal style="--reveal-delay: 100ms" class="mt-6 max-w-md text-[15px] leading-relaxed text-mute">
+              Every compliance report ships as a self-verifying archive. Your
+              auditor needs nothing but the file and the public key we publish.
+              No portal login, no trust in your infrastructure, no access to
+              live configs.
+            </p>
+            <p data-reveal style="--reveal-delay: 180ms" class="mt-4 max-w-md text-[15px] leading-relaxed text-mute">
+              Config bodies never leave the appliance. Only hashes do.
+            </p>
+          </div>
+
+          <div data-reveal style="--reveal-delay: 150ms">
+            <div class="rounded-xl border border-line bg-surface">
+              <div class="border-b border-line px-5 py-3">
+                <p class="font-mono text-[11px] text-dim">OWL-evidence-2026-08.zip</p>
+              </div>
+              <ul class="divide-y divide-line">
+                {
+                  pack.map((f) => (
+                    <li class="flex items-center justify-between px-5 py-3">
+                      <span class="font-mono text-[12.5px] text-fog">{f}</span>
+                      <span class="font-mono text-[11px] text-dim">sha256 ✓</span>
+                    </li>
+                  ))
+                }
+              </ul>
+              <div class="border-t border-line px-5 py-3.5">
+                <p class="font-mono text-[11.5px] text-mute">
+                  verified offline · Ed25519 signature valid
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hairline-t">
+      <div class="mx-auto max-w-6xl px-6 py-32">
+        <h2 data-reveal class="mx-auto max-w-2xl text-center font-serif text-4xl leading-tight text-fog md:text-5xl">
+          Stop guessing what your network is running.
+        </h2>
+        <div data-reveal style="--reveal-delay: 150ms" class="mt-10 flex items-center justify-center gap-6">
+          <button
+              type="button"
+              data-waitlist="OWL"
+              class="rounded-lg bg-fog px-6 py-3 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+          >
+  Join waitlist
+          </button>
+          <a href="/#contact" class="link-underline text-sm font-medium text-mute hover:text-fog">
+            Talk to us
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script>
+    import * as THREE from "three";
+    import { Brush, Evaluator, SUBTRACTION } from "three-bvh-csg";
+
+    const mount = document.getElementById("rook-canvas");
+    if (mount) {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(36, 1, 1, 2000);
+      camera.position.set(0, 8, 470);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      mount.appendChild(renderer.domElement);
+
+      const bodyMat = new THREE.MeshStandardMaterial({
+        color: 0xe9e9e4,
+        roughness: 0.5,
+        metalness: 0.1,
+        side: THREE.DoubleSide,
+      });
+      const rook = new THREE.Group();
+
+      // lathe-turned body: half-width profile revolved around the vertical axis
+      const PROFILE: [number, number][] = [
+        [0.01, 0], [88, 0], [88, 16], [74, 16], [74, 32], [68, 48],
+        [54, 66], [54, 130], [82, 160], [82, 174], [76, 176], [76, 202],
+        [0.01, 202],
+      ];
+      const latheGeo = new THREE.LatheGeometry(
+        PROFILE.map(([x, y]) => new THREE.Vector2(x, y - 101)),
+        96,
+      );
+      const body = new Brush(latheGeo);
+      body.updateMatrixWorld();
+
+      const cutters: THREE.Mesh[] = [];
+
+      // arch doorway cutter
+      const archShape = new THREE.Shape();
+      archShape.moveTo(-14, -18);
+      archShape.lineTo(-14, 14);
+      archShape.absarc(0, 14, 14, Math.PI, 0, true);
+      archShape.lineTo(14, -18);
+      archShape.closePath();
+      const archGeo = new THREE.ExtrudeGeometry(archShape, {
+        depth: 300,
+        bevelEnabled: false,
+        curveSegments: 32,
+      });
+      const arch = new THREE.Mesh(archGeo);
+      arch.position.set(0, -13, -150);
+      cutters.push(arch);
+
+      // band diamonds + base diamond cutters
+      const diamondGeo = (hx: number, hy: number) => {
+        const sh = new THREE.Shape();
+        sh.moveTo(0, hy);
+        sh.lineTo(hx, 0);
+        sh.lineTo(0, -hy);
+        sh.lineTo(-hx, 0);
+        sh.closePath();
+        return new THREE.ExtrudeGeometry(sh, { depth: 300, bevelEnabled: false });
+      };
+      const band: [number, number, number][] = [
+        [-40, 5, 6], [-20, 5, 6], [0, 7, 9], [20, 5, 6], [40, 5, 6],
+      ];
+      for (const [x, hx, hy] of band) {
+        const m = new THREE.Mesh(diamondGeo(hx, hy));
+        m.position.set(x, 37, -150);
+        cutters.push(m);
+      }
+      const base = new THREE.Mesh(diamondGeo(9, 6));
+      base.position.set(0, -92, -150);
+      cutters.push(base);
+
+      // boolean-subtract the carvings: real cut-through holes
+      const evaluator = new Evaluator();
+      evaluator.attributes = ["position", "normal", "uv"];
+      let carved: THREE.Mesh = body;
+      for (const c of cutters) {
+        c.updateMatrixWorld();
+        const cutter = new Brush(c.geometry);
+        cutter.position.copy(c.position);
+        cutter.updateMatrixWorld();
+        carved = evaluator.evaluate(carved, cutter, SUBTRACTION);
+      }
+      carved.material = bodyMat;
+      rook.add(carved);
+
+      // crenellation: merlons around the parapet
+      const merlonGeo = new THREE.BoxGeometry(26, 26, 14);
+      for (let i = 0; i < 8; i++) {
+        const a = (i * Math.PI) / 4;
+        const m = new THREE.Mesh(merlonGeo, bodyMat);
+        m.position.set(62 * Math.sin(a), 114, 62 * Math.cos(a));
+        m.rotation.y = a;
+        rook.add(m);
+      }
+
+      scene.add(rook);
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+      const key = new THREE.DirectionalLight(0xffffff, 1.7);
+      key.position.set(140, 200, 240);
+      const fill = new THREE.DirectionalLight(0xffffff, 0.45);
+      fill.position.set(-220, -90, 140);
+      const rim = new THREE.DirectionalLight(0xffffff, 0.8);
+      rim.position.set(-80, 140, -240);
+      scene.add(key, fill, rim);
+
+      const applyTheme = () => {
+        const light = document.documentElement.dataset.theme === "light";
+        bodyMat.color.set(light ? 0x17171c : 0xe9e9e4);
+      };
+      applyTheme();
+      new MutationObserver(applyTheme).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+
+      const resize = () => {
+        const w = Math.min(mount.clientWidth, 440);
+        const h = mount.clientHeight || w;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      };
+      resize();
+      new ResizeObserver(resize).observe(mount);
+
+      let t = 0;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      rook.rotation.x = 0.05;
+      const animate = () => {
+        t += 0.008;
+        if (!reduce) {
+          rook.rotation.y += 0.005;
+          rook.position.y = Math.sin(t) * 4;
+        } else {
+          rook.rotation.y = -0.5;
+        }
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      };
+      animate();
+    }
+  </script>
+</Base>

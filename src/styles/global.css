@@ -1,0 +1,259 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource/instrument-serif";
+
+@theme {
+  --color-ink: #050506;
+  --color-surface: #0a0a0c;
+  --color-raised: #101013;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-fog: #f5f5f4;
+  --color-mute: #8e8e93;
+  --color-dim: #5c5c63;
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+}
+
+:root {
+  --logo-ink: #f2f2ee;
+  --logo-cut: #101013;
+  --logo-edge: rgba(255, 255, 255, 0.14);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --color-ink: #fafafa;
+  --color-surface: #ffffff;
+  --color-raised: #f4f4f5;
+  --color-line: rgba(0, 0, 0, 0.1);
+  --color-fog: #0a0a0a;
+  --color-mute: #52525a;
+  --color-dim: #8a8a92;
+  --logo-ink: #0c0c0e;
+  --logo-cut: #fafafa;
+  --logo-edge: rgba(0, 0, 0, 0.22);
+  color-scheme: light;
+}
+
+[data-theme="light"][data-warm] {
+  --color-ink: #faf9f7;
+  --color-surface: #ffffff;
+  --color-raised: #f5f4f0;
+  --color-line: rgba(20, 15, 5, 0.11);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-fog);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+::selection {
+  background: var(--color-fog);
+  color: var(--color-ink);
+}
+
+.only-light {
+  display: none;
+}
+
+[data-theme="light"] .only-light {
+  display: block;
+}
+
+[data-theme="light"] .only-dark {
+  display: none;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 75%);
+}
+
+[data-theme="light"] .grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--color-line);
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@property --ray-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.rays {
+  position: relative;
+}
+
+.rays::before {
+  content: "";
+  position: absolute;
+  inset: -150%;
+  background: conic-gradient(
+    from var(--ray-angle),
+    transparent 0deg,
+    rgba(255, 255, 255, 0.28) 6deg,
+    transparent 16deg,
+    transparent 54deg,
+    rgba(255, 255, 255, 0.16) 60deg,
+    transparent 70deg,
+    transparent 114deg,
+    rgba(255, 255, 255, 0.28) 120deg,
+    transparent 130deg,
+    transparent 174deg,
+    rgba(255, 255, 255, 0.14) 180deg,
+    transparent 190deg,
+    transparent 234deg,
+    rgba(255, 255, 255, 0.28) 240deg,
+    transparent 250deg,
+    transparent 294deg,
+    rgba(255, 255, 255, 0.16) 300deg,
+    transparent 310deg
+  );
+  filter: blur(22px);
+  mask-image: radial-gradient(circle at 50% 50%, black 12%, rgba(0, 0, 0, 0.5) 45%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 12%, rgba(0, 0, 0, 0.5) 45%, transparent 72%);
+  animation: rays-spin 18s linear infinite;
+  pointer-events: none;
+}
+
+.rays::after {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.03) 35%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+[data-theme="light"] .rays::before {
+  background: conic-gradient(
+    from var(--ray-angle),
+    transparent 0deg,
+    rgba(0, 0, 0, 0.32) 6deg,
+    transparent 16deg,
+    transparent 54deg,
+    rgba(0, 0, 0, 0.18) 60deg,
+    transparent 70deg,
+    transparent 114deg,
+    rgba(0, 0, 0, 0.32) 120deg,
+    transparent 130deg,
+    transparent 174deg,
+    rgba(0, 0, 0, 0.15) 180deg,
+    transparent 190deg,
+    transparent 234deg,
+    rgba(0, 0, 0, 0.32) 240deg,
+    transparent 250deg,
+    transparent 294deg,
+    rgba(0, 0, 0, 0.18) 300deg,
+    transparent 310deg
+  );
+}
+
+[data-theme="light"] .rays::after {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(0, 0, 0, 0.09) 0%,
+    rgba(0, 0, 0, 0.03) 35%,
+    transparent 65%
+  );
+}
+
+@keyframes rays-spin {
+  to {
+    --ray-angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rays::before {
+    animation: none;
+  }
+}
+
+.card-lift {
+  transition:
+    border-color 0.4s ease,
+    background-color 0.4s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card-lift:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background-color: var(--color-raised);
+  transform: translateY(-4px);
+}
+
+[data-theme="light"] .card-lift:hover {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}

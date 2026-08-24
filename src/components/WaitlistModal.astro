@@ -1,0 +1,256 @@
+---
+---
+
+<div id="waitlist-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-6" role="dialog" aria-modal="true" aria-labelledby="waitlist-title">
+  <div id="waitlist-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+  <div class="relative w-full max-w-md rounded-2xl border border-line bg-surface p-8 shadow-2xl">
+    <button
+      id="waitlist-close"
+      type="button"
+      aria-label="Close"
+      class="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full text-dim transition-colors hover:bg-raised hover:text-fog"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M18 6 6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <div id="waitlist-form-view">
+      <h2 id="waitlist-title" class="font-display text-xl font-semibold tracking-tight text-fog">
+        Join the waitlist
+      </h2>
+      <p class="mt-2 text-sm leading-relaxed text-mute">
+        Be first in line when
+        <span id="waitlist-product" class="font-semibold text-fog">our products</span>
+        opens up. No spam, one email when it matters.
+      </p>
+
+      <form id="waitlist-form" class="mt-6 space-y-4" novalidate>
+        <input
+          type="text"
+          name="company_website"
+          id="waitlist-honeypot"
+          class="hidden"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        />
+
+        <div>
+          <label for="wl-email" class="text-xs font-medium text-mute">Work email</label>
+          <input
+            id="wl-email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="you@company.com"
+            class="mt-1.5 w-full rounded-lg border border-line bg-raised px-3.5 py-2.5 text-sm text-fog placeholder:text-dim focus:border-white/30 focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label for="wl-institution" class="text-xs font-medium text-mute">Institution or company</label>
+          <input
+            id="wl-institution"
+            name="institution"
+            type="text"
+            required
+            autocomplete="organization"
+            placeholder="Acme Bank"
+            class="mt-1.5 w-full rounded-lg border border-line bg-raised px-3.5 py-2.5 text-sm text-fog placeholder:text-dim focus:border-white/30 focus:outline-none"
+          />
+        </div>
+
+        <p id="waitlist-status" class="hidden text-sm leading-relaxed"></p>
+
+        <button
+          type="submit"
+          id="waitlist-submit"
+          class="w-full rounded-lg bg-fog py-2.5 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+        >
+          Join waitlist
+        </button>
+      </form>
+    </div>
+
+    <div id="waitlist-success" class="hidden flex-col items-center py-6 text-center">
+      <div id="waitlist-tick" class="wl-pop">
+        <svg class="h-20 w-20" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="wl-circle" cx="26" cy="26" r="24" fill="none" stroke="#10b981" stroke-width="2.5" />
+          <path
+            class="wl-check"
+            fill="none"
+            stroke="#10b981"
+            stroke-width="3.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M14.5 27l7.5 7.5L37.5 18"
+          ></path>
+        </svg>
+      </div>
+      <h3 class="mt-6 font-display text-lg font-semibold tracking-tight text-fog">
+        You're on the list
+      </h3>
+      <p class="mt-2 max-w-xs text-sm leading-relaxed text-mute">
+        We'll be in touch the moment
+        <span id="waitlist-product-success" class="font-semibold text-fog">it</span>
+        opens up.
+      </p>
+      <button
+        id="waitlist-done"
+        type="button"
+        class="mt-8 rounded-lg bg-fog px-10 py-2.5 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+      >
+        Done
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .wl-circle {
+    stroke-dasharray: 151;
+    stroke-dashoffset: 151;
+    animation: wl-draw 0.55s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  }
+  .wl-check {
+    stroke-dasharray: 36;
+    stroke-dashoffset: 36;
+    animation: wl-draw 0.3s 0.45s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  }
+  .wl-pop {
+    animation: wl-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes wl-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes wl-pop {
+    from {
+      transform: scale(0.7);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wl-circle,
+    .wl-check {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+    .wl-pop {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const modal = document.getElementById("waitlist-modal");
+  const formView = document.getElementById("waitlist-form-view");
+  const successView = document.getElementById("waitlist-success");
+  const productEl = document.getElementById("waitlist-product");
+  const productSuccessEl = document.getElementById("waitlist-product-success");
+  const statusEl = document.getElementById("waitlist-status");
+  const submitBtn = document.getElementById("waitlist-submit") as HTMLButtonElement | null;
+  const form = document.getElementById("waitlist-form") as HTMLFormElement | null;
+  const tickWrap = document.getElementById("waitlist-tick");
+
+  const open = (product: string) => {
+    if (!modal) return;
+    if (productEl) productEl.textContent = product;
+    if (productSuccessEl) productSuccessEl.textContent = product || "it";
+    formView?.classList.remove("hidden");
+    successView?.classList.add("hidden");
+    successView?.classList.remove("flex");
+    if (statusEl) statusEl.classList.add("hidden");
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Join waitlist";
+    }
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    document.getElementById("wl-email")?.focus();
+  };
+
+  const close = () => {
+    if (!modal) return;
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  };
+
+  const showSuccess = () => {
+    formView?.classList.add("hidden");
+    if (successView) {
+      successView.classList.remove("hidden");
+      successView.classList.add("flex");
+    }
+    if (tickWrap) {
+      const clone = tickWrap.cloneNode(true);
+      tickWrap.replaceWith(clone);
+    }
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-waitlist]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      open(btn.dataset.waitlist || "our products");
+    });
+  });
+
+  document.getElementById("waitlist-backdrop")?.addEventListener("click", close);
+  document.getElementById("waitlist-close")?.addEventListener("click", close);
+  document.getElementById("waitlist-done")?.addEventListener("click", close);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) close();
+  });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!statusEl || !submitBtn) return;
+
+    const email = (document.getElementById("wl-email") as HTMLInputElement).value.trim();
+    const institution = (document.getElementById("wl-institution") as HTMLInputElement).value.trim();
+    const honeypot = (document.getElementById("waitlist-honeypot") as HTMLInputElement).value;
+
+    const show = (msg: string, ok: boolean) => {
+      statusEl.textContent = msg;
+      statusEl.classList.remove("hidden", "text-emerald-500", "text-red-400");
+      statusEl.classList.add(ok ? "text-emerald-500" : "text-red-400");
+    };
+
+    if (!email || !institution) {
+      show("Please fill in both fields.", false);
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+    statusEl.classList.add("hidden");
+
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, institution, product: productEl?.textContent, company_website: honeypot }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        showSuccess();
+      } else {
+        show(data.error || "Something went wrong. Please try again.", false);
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Join waitlist";
+      }
+    } catch {
+      show("Network error. Please try again.", false);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Join waitlist";
+    }
+  });
+</script>

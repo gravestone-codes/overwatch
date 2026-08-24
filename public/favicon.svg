@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <rect width="256" height="256" rx="52" fill="#0a0a0c"/>
+  <g fill="#f2f2ee">
+    <path d="M52 36 H80 V50 H114 V36 H142 V50 H176 V36 H204 V64 H52 Z"/>
+    <rect x="46" y="62" width="164" height="16" rx="2"/>
+    <path fill-rule="evenodd" d="M62 78 L74 108 V172 L60 190 V206 H196 V190 L182 172 V108 L194 78 Z M114 168 V132 A14 14 0 0 1 142 132 V168 Z"/>
+    <rect x="54" y="204" width="148" height="18" rx="2"/>
+    <rect x="40" y="220" width="176" height="18" rx="3"/>
+  </g>
+  <g fill="#0a0a0c">
+    <path d="M128 91 L135 100 L128 109 L121 100 Z"/>
+    <path d="M88 94 L93 100 L88 106 L83 100 Z"/>
+    <path d="M108 94 L113 100 L108 106 L103 100 Z"/>
+    <path d="M148 94 L153 100 L148 106 L143 100 Z"/>
+    <path d="M168 94 L173 100 L168 106 L163 100 Z"/>
+    <path d="M128 223 L137 229 L128 235 L119 229 Z"/>
+  </g>
+  <g fill="none" stroke="#0a0a0c" stroke-width="2">
+    <path d="M52 57 H204" opacity="0.18"/>
+    <path d="M70 88 H186" opacity="0.2"/>
+    <path d="M74 112 H182" opacity="0.15"/>
+    <path d="M74 168 H182" opacity="0.15"/>
+    <path d="M82 114 V162" opacity="0.12"/>
+    <path d="M96 114 V162" opacity="0.12"/>
+    <path d="M160 114 V162" opacity="0.12"/>
+    <path d="M174 114 V162" opacity="0.12"/>
+    <rect x="66" y="210" width="124" height="6" rx="3" opacity="0.22"/>
+  </g>
+</svg>

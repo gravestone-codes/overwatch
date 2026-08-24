@@ -1,0 +1,363 @@
+---
+import Base from "@layouts/Base.astro";
+import ProductNav from "@components/ProductNav.astro";
+import Footer from "@components/Footer.astro";
+
+const steps = [
+  {
+    n: "01",
+    title: "We install the agent",
+    body: "A lightweight OmniArk agent goes on your machines. It dials out over mutual TLS, so there are no inbound ports to open and no VPN to babysit.",
+  },
+  {
+    n: "02",
+    title: "Your data gets vaulted",
+    body: "Snapshots are deduplicated, compressed, and encrypted on your machine before they travel. The vault holds ciphertext. The keys are yours.",
+  },
+  {
+    n: "03",
+    title: "Restores are proven",
+    body: "On a schedule you choose, a real restore is performed and a signed verification report lands with your team. If we cannot restore it, you hear it from us first.",
+  },
+];
+
+const trust = [
+  {
+    title: "End-to-end encrypted",
+    body: "Encrypted on your machine, decrypted only on restore. Not even we can read your vault.",
+  },
+  {
+    title: "You pay for what is unique",
+    body: "Chunk-level dedup means daily backups of unchanged systems cost almost nothing to keep.",
+  },
+  {
+    title: "Scheduled restore proofs",
+    body: "A real file set is restored and verified every cycle. Signed, timestamped evidence.",
+  },
+  {
+    title: "Data residency options",
+    body: "Your vault lives where your regulator requires it, under the laws that govern you.",
+  },
+  {
+    title: "Air-gap capable",
+    body: "For sensitive environments, the vault runs fully disconnected, identity intact.",
+  },
+  {
+    title: "Audit-ready reporting",
+    body: "Retention, restore proofs, and chain-of-custody mapped to frameworks auditors know.",
+  },
+];
+
+const POLY: [number, number][] = [
+  [52, 36], [80, 36], [80, 50], [114, 50], [114, 36], [142, 36], [142, 50],
+  [176, 50], [176, 36], [204, 36], [204, 64], [210, 64], [210, 78],
+  [194, 78], [182, 108], [182, 172], [196, 190], [196, 206], [202, 206],
+  [202, 222], [216, 222], [216, 238], [40, 238], [40, 222], [54, 222],
+  [54, 206], [60, 206], [60, 190], [74, 172], [74, 108], [62, 78],
+  [46, 78], [46, 62], [52, 62],
+];
+
+function inPoly(x: number, y: number, poly: [number, number][]): boolean {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i];
+    const [xj, yj] = poly[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+function segDist(
+  px: number, py: number,
+  ax: number, ay: number, bx: number, by: number,
+): number {
+  const dx = bx - ax;
+  const dy = by - ay;
+  const l2 = dx * dx + dy * dy;
+  let t = l2 ? ((px - ax) * dx + (py - ay) * dy) / l2 : 0;
+  t = Math.max(0, Math.min(1, t));
+  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+}
+
+function edgeDist(x: number, y: number, poly: [number, number][]): number {
+  let min = Infinity;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const d = segDist(x, y, poly[j][0], poly[j][1], poly[i][0], poly[i][1]);
+    if (d < min) min = d;
+  }
+  return min;
+}
+
+const DIAMONDS: [number, number, number, number][] = [
+  [128, 100, 7, 9], [88, 100, 5, 6], [108, 100, 5, 6],
+  [148, 100, 5, 6], [168, 100, 5, 6], [128, 229, 9, 6],
+];
+
+const LINE_BANDS: [number, number, number, number][] = [
+  [52, 204, 55.5, 59], [70, 186, 86.5, 90], [74, 182, 110.5, 114],
+  [74, 182, 166.5, 170], [66, 190, 209, 217],
+];
+
+const KEEP_DOTS: [number, number][] = [];
+for (let gy = 34; gy <= 240; gy += 9) {
+  for (let gx = 38; gx <= 218; gx += 9) {
+    if (!inPoly(gx, gy, POLY)) continue;
+    if (edgeDist(gx, gy, POLY) < 2.4) continue;
+    if (gy >= 132 && gy <= 168 && gx >= 114 && gx <= 142) continue;
+    if (gy <= 132 && gy >= 116 && Math.hypot(gx - 128, gy - 132) <= 15) continue;
+    let cut = false;
+    for (const [cx, cy, hx, hy] of DIAMONDS) {
+      if (Math.abs(gx - cx) / hx + Math.abs(gy - cy) / hy <= 1.25) { cut = true; break; }
+    }
+    if (!cut) {
+      for (const [x0, x1, y0, y1] of LINE_BANDS) {
+        if (gx >= x0 && gx <= x1 && gy >= y0 && gy <= y1) { cut = true; break; }
+      }
+    }
+    if (!cut) KEEP_DOTS.push([gx, gy]);
+  }
+}
+
+let BLINK_INDEX = 0;
+let best = Infinity;
+KEEP_DOTS.forEach(([x, y], i) => {
+  const d = Math.hypot(x - 128, y - 36);
+  if (d < best) { best = d; BLINK_INDEX = i; }
+});
+---
+
+<Base
+  theme="light"
+  warm
+  title="Ark · Managed Resilience, Delivered · Overwatch Labs"
+  description="Ark is managed backup powered by OmniArk: encrypted, deduplicated, and vaulted, with restorability proven on a schedule you can audit."
+>
+  <ProductNav name="Ark" />
+
+  <main>
+    <section class="relative overflow-hidden">
+      <div class="mx-auto max-w-6xl px-6 pt-36 pb-28 md:pt-44">
+        <div class="grid items-center gap-16 lg:grid-cols-2">
+          <div>
+
+
+        <h1
+          data-reveal
+          style="--reveal-delay: 100ms"
+          class="max-w-lg font-body text-5xl leading-[1.05] font-bold tracking-tight text-fog md:text-6xl"
+        >
+          Backup that proves itself.
+        </h1>
+        <p
+          data-reveal
+          style="--reveal-delay: 200ms"
+          class="mt-6 max-w-md text-base leading-relaxed text-mute md:text-lg"
+        >
+          Ark is managed backup powered by OmniArk. Your data encrypted and
+          vaulted. Restores demonstrated on a schedule you can audit.
+        </p>
+        <div
+          data-reveal
+          style="--reveal-delay: 300ms"
+          class="mt-9 flex items-center gap-5"
+        >
+          <button
+              type="button"
+              data-waitlist="Ark"
+              class="rounded-full bg-amber-400 px-7 py-3 text-sm font-bold text-ink transition-opacity hover:opacity-85"
+          >
+  Join waitlist
+          </button>
+          <a href="#how" class="link-underline text-sm font-medium text-mute hover:text-fog">
+            How it works
+          </a>
+        </div>
+          </div>
+
+                  <div data-reveal style="--reveal-delay: 250ms" class="relative hidden h-[420px] lg:block">
+          <div
+            class="absolute inset-0"
+            style="
+              background-image: radial-gradient(circle, var(--color-line) 1.5px, transparent 1.5px);
+              background-size: 30px 30px;
+              mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, black 30%, transparent 78%);
+              -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, black 30%, transparent 78%);
+            "
+            aria-hidden="true"
+          >
+          </div>
+          <div id="ark-grid" class="absolute inset-0">
+            {
+              KEEP_DOTS.map(([x, y], i) => {
+                const left = ((x / 256) * 100).toFixed(2);
+                const top = ((y / 256) * 100).toFixed(2);
+                return (
+                  <div
+                    class="absolute"
+                    style={`left: ${left}%; top: ${top}%;`}
+                    data-node
+                    data-x={left}
+                    data-y={top}
+                    aria-hidden="true"
+                  >
+                    {i === BLINK_INDEX && (
+                      <span
+                        id="ark-ping"
+                        class="absolute left-0 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full bg-amber-400/70"
+                      />
+                    )}
+                    <span class="ark-dot relative block h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-mute/40 bg-raised will-change-[background,box-shadow,transform]" />
+                  </div>
+                );
+              })
+            }
+          </div>
+          <p class="absolute -bottom-4 left-1/2 w-full -translate-x-1/2 font-mono text-[11px] text-dim">
+            the keep, node by node. every one: a machine we can prove is recoverable
+          </p>
+        </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="hairline-t scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-6 py-28">
+        <h2 data-reveal class="text-center font-body text-3xl font-bold tracking-tight text-fog md:text-4xl">
+          Three steps. No surprises.
+        </h2>
+
+        <div class="mt-16 grid gap-5 md:grid-cols-3">
+          {
+            steps.map((s, i) => (
+              <div
+                data-reveal
+                style={`--reveal-delay: ${i * 110}ms`}
+                class="rounded-3xl border border-line bg-surface p-8"
+              >
+                <span class="font-mono text-sm font-semibold text-amber-600 [html[data-theme=dark]_&]:text-amber-400">
+                  {s.n}
+                </span>
+                <h3 class="mt-4 font-body text-lg font-bold tracking-tight text-fog">{s.title}</h3>
+                <p class="mt-3 text-sm leading-relaxed text-mute">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="hairline-t">
+      <div class="mx-auto max-w-6xl px-6 py-28">
+        <h2 data-reveal class="text-center font-body text-3xl font-bold tracking-tight text-fog md:text-4xl">
+          Trust, in writing.
+        </h2>
+        <p data-reveal style="--reveal-delay: 100ms" class="mx-auto mt-5 max-w-lg text-center leading-relaxed text-mute">
+          Built for organisations that answer to regulators, boards, and
+          customers who ask hard questions. Every claim is one we can
+          demonstrate on request.
+        </p>
+
+        <div class="mx-auto mt-16 grid max-w-4xl gap-x-14 gap-y-10 sm:grid-cols-2">
+          {
+            trust.map((t, i) => (
+              <div data-reveal style={`--reveal-delay: ${(i % 2) * 100}ms`} class="flex gap-4">
+                <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-400/15">
+                  <svg class="h-3.5 w-3.5 text-amber-600 [html[data-theme=dark]_&]:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 class="font-body text-[15px] font-bold tracking-tight text-fog">{t.title}</h3>
+                  <p class="mt-1.5 text-sm leading-relaxed text-mute">{t.body}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="hairline-t">
+      <div class="mx-auto max-w-6xl px-6 py-32 text-center">
+        <h2 data-reveal class="mx-auto max-w-2xl font-body text-4xl font-bold tracking-tight text-fog md:text-5xl">
+          When did you last prove your backups work?
+        </h2>
+        <p data-reveal style="--reveal-delay: 120ms" class="mx-auto mt-6 max-w-md leading-relaxed text-mute">
+          Tell us what you cannot afford to lose. We will show you exactly how
+          it survives.
+        </p>
+        <div data-reveal style="--reveal-delay: 240ms" class="mt-10">
+          <button
+              type="button"
+              data-waitlist="Ark"
+              class="inline-block rounded-full bg-amber-400 px-8 py-3.5 text-sm font-bold text-ink transition-opacity hover:opacity-85"
+          >
+  Join waitlist
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script>
+    const grid = document.getElementById("ark-grid");
+    if (grid) {
+      const nodes = [
+        ...grid.querySelectorAll<HTMLElement>("[data-node]"),
+      ].map((n) => ({
+        dot: n.firstElementChild as HTMLElement,
+        x: parseFloat(n.dataset.x!) / 100,
+        y: parseFloat(n.dataset.y!) / 100,
+      }));
+      const RADIUS = 0.17;
+      let tx = 0.5;
+      let ty = 2;
+      let cx = 0.5;
+      let cy = 2;
+      let raf = 0;
+
+      const paint = () => {
+        const r = grid.getBoundingClientRect();
+        for (const { dot, x, y } of nodes) {
+          const d = Math.hypot(cx - x, ((cy - y) * r.height) / r.width);
+          const t = Math.max(0, 1 - d / RADIUS);
+          if (t > 0.015) {
+            dot.style.background = `rgba(245, 158, 11, ${(0.3 + 0.7 * t).toFixed(3)})`;
+            dot.style.borderColor = "transparent";
+            dot.style.boxShadow = `0 0 ${(6 + 22 * t).toFixed(1)}px ${(1 + 6 * t).toFixed(1)}px rgba(245, 158, 11, ${(0.1 + 0.3 * t).toFixed(3)})`;
+            dot.style.transform = `translate(-50%, -50%) scale(${(1 + 0.45 * t).toFixed(3)})`;
+          } else if (dot.style.background) {
+            dot.style.background = "";
+            dot.style.borderColor = "";
+            dot.style.boxShadow = "";
+            dot.style.transform = "";
+          }
+        }
+      };
+
+      const tick = () => {
+        cx += (tx - cx) * 0.14;
+        cy += (ty - cy) * 0.14;
+        paint();
+        raf = requestAnimationFrame(tick);
+      };
+
+      grid.addEventListener("mousemove", (e) => {
+        const r = grid.getBoundingClientRect();
+        tx = (e.clientX - r.left) / r.width;
+        ty = (e.clientY - r.top) / r.height;
+        document.getElementById("ark-ping")?.remove();
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+
+      grid.addEventListener("mouseleave", () => {
+        ty = 2;
+      });
+    }
+  </script>
+</Base>

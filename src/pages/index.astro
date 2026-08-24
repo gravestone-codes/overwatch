@@ -1,0 +1,264 @@
+---
+import Base from "@layouts/Base.astro";
+import Nav from "@components/Nav.astro";
+import Footer from "@components/Footer.astro";
+import Logo from "@components/Logo.astro";
+
+const products = [
+  {
+    name: "OWL",
+    tagline: "Network Configuration Governance",
+    description:
+      "Multi-vendor config backup, drift detection, and honest compliance scoring, with a tamper-evident audit chain that stands up to any auditor.",
+    href: "/products/owl",
+  },
+  {
+    name: "OmniArk",
+    tagline: "The Stream-Native Backup Engine",
+    description:
+      "A deduplicated, encrypted, self-verifying backup engine built in Rust. Every snapshot provable, byte for byte, even offline.",
+    href: "/products/omniark",
+  },
+  {
+    name: "Ark",
+    tagline: "Managed Resilience",
+    description:
+      "Backup as a service, powered by OmniArk. Your data, encrypted and vaulted, restored in minutes, not promises.",
+    href: "/products/ark",
+  },
+];
+
+const principles = [
+  {
+    title: "Own your systems",
+    body: "Open source at the core. No vendor holds your infrastructure hostage, no licence expires out from under you. You own what runs your business.",
+  },
+  {
+    title: "Security by construction",
+    body: "Encryption, mutual authentication, and tamper-evident audit trails are not features we add; they are properties we build in from the first commit.",
+  },
+  {
+    title: "Built to endure",
+    body: "We do not build demos. Every system we ship is designed to run under real load, with real users, handling real consequences, for years.",
+  },
+];
+---
+
+<Base>
+  <Nav />
+
+  <main>
+    <section class="relative overflow-hidden">
+      <div class="grid-bg absolute inset-0" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-6xl px-6 pt-32 pb-14 text-center md:pt-36">
+        <div data-reveal class="flex justify-center">
+          <div class="rays flex justify-center">
+            <Logo size={118} />
+          </div>
+        </div>
+        <p
+          data-reveal
+          style="--reveal-delay: 100ms"
+          class="mt-10 font-display text-xs font-medium tracking-[0.4em] text-mute uppercase"
+        >
+          Overwatch Labs
+        </p>
+        <h1
+          data-reveal
+          style="--reveal-delay: 100ms"
+          class="mx-auto mt-6 max-w-4xl font-display text-5xl leading-[1.04] font-semibold tracking-tight text-fog md:text-7xl"
+        >
+          Infrastructure that observes, protects, and endures.
+        </h1>
+        <p
+          data-reveal
+          style="--reveal-delay: 200ms"
+          class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-mute md:text-lg"
+        >
+          We design and build the systems other systems depend on: network
+          governance, backup engines, and managed resilience for organisations
+          that cannot afford to be surprised.
+        </p>
+        <div
+          data-reveal
+          style="--reveal-delay: 420ms"
+          class="mt-10 flex items-center justify-center gap-4"
+        >
+          <a
+            href="#products"
+            class="rounded-full bg-fog px-6 py-2.5 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+          >
+            Explore products
+          </a>
+          <a
+            href="#contact"
+            class="rounded-full border border-line px-6 py-2.5 text-sm font-medium text-mute transition-colors hover:border-white/25 hover:text-fog"
+          >
+            Talk to us
+          </a>
+        </div>
+      </div>
+
+      <div
+        data-reveal
+        style="--reveal-delay: 520ms"
+        class="relative mx-auto max-w-4xl px-6 pb-14"
+      >
+        <p class="text-center text-xs tracking-[0.24em] text-dim uppercase">
+          Aligned with the standards your auditors already know
+        </p>
+        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+          {
+            ["ISO 27001:2022", "PCI DSS v4.0", "NCSA Controls", "PDPO Ready"].map(
+              (s) => (
+                <span class="rounded-full border border-line bg-surface px-4 py-1.5 font-display text-[12px] font-medium tracking-wide text-mute">
+                  {s}
+                </span>
+              ),
+            )
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="hairline-t scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-6 py-28">
+        <div data-reveal class="max-w-2xl">
+          <p class="font-display text-xs font-medium tracking-[0.32em] text-mute uppercase">
+            Products
+          </p>
+          <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-fog md:text-4xl">
+            Three systems. One standard.
+          </h2>
+          <p class="mt-4 text-mute leading-relaxed">
+            Each product stands alone. Together they form a spine of
+            resilience, from the network edge to the last encrypted snapshot.
+          </p>
+        </div>
+
+        <div class="mt-14 grid gap-5 md:grid-cols-3">
+          {
+            products.map((p, i) => (
+              <a
+                href={p.href}
+                data-reveal
+                style={`--reveal-delay: ${i * 110}ms`}
+                class="card-lift group flex flex-col rounded-2xl border border-line bg-surface p-8"
+              >
+                <div class="flex items-baseline justify-between">
+                  <h3 class="font-display text-xl font-semibold tracking-tight text-fog">
+                    {p.name}
+                  </h3>
+                  <span class="text-dim transition-transform duration-300 group-hover:translate-x-1">
+                    &rarr;
+                  </span>
+                </div>
+                <p class="mt-1.5 text-[13px] font-medium text-mute">{p.tagline}</p>
+                <p class="mt-5 text-sm leading-relaxed text-mute">{p.description}</p>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="hairline-t scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-6 py-28">
+        <div data-reveal class="max-w-2xl">
+          <p class="font-display text-xs font-medium tracking-[0.32em] text-mute uppercase">
+            Services
+          </p>
+          <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-fog md:text-4xl">
+            The people behind the products.
+          </h2>
+        </div>
+
+        <div class="mt-14 grid gap-5 md:grid-cols-2">
+          <div data-reveal class="rounded-2xl border border-line bg-surface p-10">
+            <h3 class="font-display text-xl font-semibold tracking-tight text-fog">
+              Platform Engineering
+            </h3>
+            <p class="mt-4 text-sm leading-relaxed text-mute">
+              Bespoke systems, designed and built end to end: order engines,
+              operations dashboards, data platforms. We take a product from a
+              blank page to production, and we stay accountable after launch.
+            </p>
+          </div>
+          <div data-reveal style="--reveal-delay: 110ms" class="rounded-2xl border border-line bg-surface p-10">
+            <h3 class="font-display text-xl font-semibold tracking-tight text-fog">
+              Managed Resilience
+            </h3>
+            <p class="mt-4 text-sm leading-relaxed text-mute">
+              Backup and recovery as a discipline, not an afterthought. Ark
+              vaults your critical data with OmniArk under the hood, encrypted,
+              deduplicated and verified, and proves restorability on a schedule
+              you can audit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="principles" class="hairline-t scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-6 py-28">
+        <div data-reveal class="max-w-2xl">
+          <p class="font-display text-xs font-medium tracking-[0.32em] text-mute uppercase">
+            Principles
+          </p>
+          <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-fog md:text-4xl">
+            What we refuse to compromise.
+          </h2>
+        </div>
+
+        <div class="mt-14 grid gap-10 md:grid-cols-3">
+          {
+            principles.map((p, i) => (
+              <div data-reveal style={`--reveal-delay: ${i * 110}ms`}>
+                <div class="h-px w-10 bg-white/25" />
+                <h3 class="mt-6 font-display text-lg font-semibold tracking-tight text-fog">
+                  {p.title}
+                </h3>
+                <p class="mt-3 text-sm leading-relaxed text-mute">{p.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="hairline-t scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-6 py-32 text-center">
+        <div data-reveal class="flex justify-center">
+          <div class="rays flex justify-center">
+            <Logo size={96} living />
+          </div>
+        </div>
+        <h2
+          data-reveal
+          style="--reveal-delay: 100ms"
+          class="mx-auto mt-10 max-w-2xl font-display text-3xl font-semibold tracking-tight text-fog md:text-5xl"
+        >
+          Build with us.
+        </h2>
+        <p
+          data-reveal
+          style="--reveal-delay: 200ms"
+          class="mx-auto mt-6 max-w-xl text-mute leading-relaxed"
+        >
+          Tell us what your organisation cannot afford to lose, and we will
+          show you how we protect it.
+        </p>
+        <div data-reveal style="--reveal-delay: 300ms" class="mt-10">
+          <a
+            href="mailto:info@overwatchlabs.dev"
+            class="inline-block rounded-full bg-fog px-8 py-3 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+          >
+            info@overwatchlabs.dev
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

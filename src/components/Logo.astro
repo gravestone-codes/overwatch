@@ -1,0 +1,191 @@
+---
+interface Props {
+  size?: number;
+  living?: boolean;
+  class?: string;
+}
+
+const { size = 64, living = false, class: className } = Astro.props;
+const uid = `lg${Math.random().toString(36).slice(2, 8)}`;
+
+const silhouette = [
+  'M52 36 H80 V50 H114 V36 H142 V50 H176 V36 H204 V64 H52 Z',
+  'M62 78 L74 108 V172 L60 190 V206 H196 V190 L182 172 V108 L194 78 Z M114 168 V132 A14 14 0 0 1 142 132 V168 Z',
+];
+
+const engravings = {
+  fills: [
+    'M128 91 L135 100 L128 109 L121 100 Z',
+    'M88 94 L93 100 L88 106 L83 100 Z',
+    'M108 94 L113 100 L108 106 L103 100 Z',
+    'M148 94 L153 100 L148 106 L143 100 Z',
+    'M168 94 L173 100 L168 106 L163 100 Z',
+    'M128 223 L137 229 L128 235 L119 229 Z',
+  ],
+  strokes: [
+    { d: 'M52 57 H204', o: 0.18 },
+    { d: 'M70 88 H186', o: 0.2 },
+    { d: 'M74 112 H182', o: 0.15 },
+    { d: 'M74 168 H182', o: 0.15 },
+    { d: 'M82 114 V162', o: 0.12 },
+    { d: 'M96 114 V162', o: 0.12 },
+    { d: 'M160 114 V162', o: 0.12 },
+    { d: 'M174 114 V162', o: 0.12 },
+  ],
+};
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 256 256"
+  class={className}
+  role="img"
+  aria-label="Overwatch Labs"
+>
+  {
+    living && (
+      <defs>
+        <linearGradient id={`${uid}-d`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0">
+            <animate
+              attributeName="stop-color"
+              values="#f5f5f4;#6ee7b7;#fcd34d;#f5f5f4"
+              keyTimes="0;0.33;0.66;1"
+              calcMode="spline"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+              dur="9s"
+              repeatCount="indefinite"
+            />
+          </stop>
+          <stop offset="0.5">
+            <animate
+              attributeName="stop-color"
+              values="#ececea;#5eddb0;#f5c833;#ececea"
+              keyTimes="0;0.33;0.66;1"
+              calcMode="spline"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+              dur="9s"
+              repeatCount="indefinite"
+            />
+          </stop>
+          <stop offset="1">
+            <animate
+              attributeName="stop-color"
+              values="#dededd;#46cfa4;#eebc22;#dededd"
+              keyTimes="0;0.33;0.66;1"
+              calcMode="spline"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+              dur="9s"
+              repeatCount="indefinite"
+            />
+          </stop>
+        </linearGradient>
+        <linearGradient id={`${uid}-l`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0">
+            <animate
+              attributeName="stop-color"
+              values="#27272e;#0f766e;#b45309;#27272e"
+              keyTimes="0;0.33;0.66;1"
+              calcMode="spline"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+              dur="9s"
+              repeatCount="indefinite"
+            />
+          </stop>
+          <stop offset="0.5">
+            <animate
+              attributeName="stop-color"
+              values="#202026;#0d6963;#a34b08;#202026"
+              keyTimes="0;0.33;0.66;1"
+              calcMode="spline"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+              dur="9s"
+              repeatCount="indefinite"
+            />
+          </stop>
+          <stop offset="1">
+            <animate
+              attributeName="stop-color"
+              values="#191920;#0b5b55;#924307;#191920"
+              keyTimes="0;0.33;0.66;1"
+              calcMode="spline"
+              keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+              dur="9s"
+              repeatCount="indefinite"
+            />
+          </stop>
+        </linearGradient>
+        <linearGradient id={`${uid}-shade`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.1" />
+          <stop offset="0.45" stop-color="#ffffff" stop-opacity="0" />
+          <stop offset="1" stop-color="#000000" stop-opacity="0.3" />
+        </linearGradient>
+        <clipPath id={`${uid}-keep`}>
+          <path d={silhouette[0]} />
+          <path d={silhouette[1]} />
+          <rect x="46" y="62" width="164" height="16" rx="2" />
+          <rect x="54" y="204" width="148" height="18" rx="2" />
+          <rect x="40" y="220" width="176" height="18" rx="3" />
+        </clipPath>
+      </defs>
+    )
+  }
+
+  {
+    living ? (
+      <g>
+        <g class="only-dark" fill={`url(#${uid}-d)`}>
+          <path d={silhouette[0]} />
+          <rect x="46" y="62" width="164" height="16" rx="2" />
+          <path fill-rule="evenodd" d={silhouette[1]} />
+          <rect x="54" y="204" width="148" height="18" rx="2" />
+          <rect x="40" y="220" width="176" height="18" rx="3" />
+        </g>
+        <g class="only-light" fill={`url(#${uid}-l)`}>
+          <path d={silhouette[0]} />
+          <rect x="46" y="62" width="164" height="16" rx="2" />
+          <path fill-rule="evenodd" d={silhouette[1]} />
+          <rect x="54" y="204" width="148" height="18" rx="2" />
+          <rect x="40" y="220" width="176" height="18" rx="3" />
+        </g>
+      </g>
+    ) : (
+      <g fill="var(--logo-ink)">
+        <path d={silhouette[0]} />
+        <rect x="46" y="62" width="164" height="16" rx="2" />
+        <path fill-rule="evenodd" d={silhouette[1]} />
+        <rect x="54" y="204" width="148" height="18" rx="2" />
+        <rect x="40" y="220" width="176" height="18" rx="3" />
+      </g>
+    )
+  }
+
+  {
+    living && (
+      <g clip-path={`url(#${uid}-keep)`}>
+        <rect x="0" y="0" width="256" height="256" fill={`url(#${uid}-shade)`} />
+      </g>
+    )
+  }
+
+  <g fill="var(--logo-cut)">
+    {engravings.fills.map((d) => (
+      <path d={d} />
+    ))}
+  </g>
+
+  <g fill="none" stroke="var(--logo-cut)" stroke-width="2">
+    {engravings.strokes.map((s) => (
+      <path d={s.d} opacity={s.o} />
+    ))}
+    <rect x="66" y="210" width="124" height="6" rx="3" opacity="0.22" />
+  </g>
+
+  <path
+    d="M114 168 V132 A14 14 0 0 1 142 132 V168"
+    fill="none"
+    stroke="var(--logo-edge)"
+    stroke-width="2"
+  />
+</svg>

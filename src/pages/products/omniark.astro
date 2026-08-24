@@ -1,0 +1,253 @@
+---
+import Base from "@layouts/Base.astro";
+import ProductNav from "@components/ProductNav.astro";
+import Footer from "@components/Footer.astro";
+
+const features = [
+  {
+    n: "01",
+    title: "Chunk-level deduplication",
+    body: "Every chunk is hashed before it is stored. Back up a thousand machines, store what is unique. Your second snapshot is a fraction of the first.",
+  },
+  {
+    n: "02",
+    title: "Encrypted before it leaves",
+    body: "Compress, then encrypt, then pack. The repository never sees plaintext, and neither does the network in between.",
+  },
+  {
+    n: "03",
+    title: "Self-verifying snapshots",
+    body: "Packs carry sealed footers and manifests. A restore can be proven byte for byte, on any machine, with no access to the original.",
+  },
+  {
+    n: "04",
+    title: "A real fleet",
+    body: "Agents enroll to a hub with per-machine cryptographic identity and certificates from the hub's own CA. No public CA, no phone-home.",
+  },
+  {
+    n: "05",
+    title: "The hub is blind",
+    body: "It triggers jobs and collects status over mutual TLS. Backup data flows agent to repository, end to end, encrypted. The hub never sees a byte of it.",
+  },
+  {
+    n: "06",
+    title: "Rust, all the way down",
+    body: "A multi-threaded pipeline with retries and backpressure. The live dashboard observes progress events. It never drives the backup.",
+  },
+];
+---
+
+<Base
+  title="OmniArk · The Stream-Native Backup Engine · Overwatch Labs"
+  description="OmniArk is a stream-native backup engine: chunked, deduplicated, encrypted, and self-verifying. A real pipeline in Rust, with a fleet-grade hub."
+>
+  <ProductNav name="OmniArk" />
+
+  <main>
+    <section class="relative flex min-h-[92vh] items-center justify-center overflow-hidden">
+      <svg
+        class="absolute inset-0 h-full w-full"
+        viewBox="0 0 1200 800"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="oa-beam-d" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0">
+              <animate
+                attributeName="stop-color"
+                values="#f5f5f4;#6ee7b7;#fcd34d;#f5f5f4"
+                keyTimes="0;0.33;0.66;1"
+                calcMode="spline"
+                keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+                dur="12s"
+                repeatCount="indefinite"
+              />
+            </stop>
+            <stop offset="1">
+              <animate
+                attributeName="stop-color"
+                values="#8a8a88;#2f9e7d;#c79a1e;#8a8a88"
+                keyTimes="0;0.33;0.66;1"
+                calcMode="spline"
+                keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+                dur="12s"
+                repeatCount="indefinite"
+              />
+            </stop>
+          </linearGradient>
+          <linearGradient id="oa-beam-l" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0">
+              <animate
+                attributeName="stop-color"
+                values="#18181f;#0a5c54;#8f4006;#18181f"
+                keyTimes="0;0.33;0.66;1"
+                calcMode="spline"
+                keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+                dur="12s"
+                repeatCount="indefinite"
+              />
+            </stop>
+            <stop offset="1">
+              <animate
+                attributeName="stop-color"
+                values="#08080b;#073b36;#5f2c04;#08080b"
+                keyTimes="0;0.33;0.66;1"
+                calcMode="spline"
+                keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+                dur="12s"
+                repeatCount="indefinite"
+              />
+            </stop>
+          </linearGradient>
+          <filter id="oa-blur" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="26" />
+          </filter>
+          <filter id="oa-grain">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" />
+            <feColorMatrix type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="0.06" />
+            </feComponentTransfer>
+            <feComposite operator="over" in2="SourceGraphic" />
+          </filter>
+          <radialGradient id="oa-fade" cx="0.5" cy="0.5" r="0.62">
+            <stop offset="0" stop-color="white" />
+            <stop offset="0.42" stop-color="white" />
+            <stop offset="0.85" stop-color="black" />
+            <stop offset="1" stop-color="black" />
+          </radialGradient>
+          <mask id="oa-mask">
+            <rect width="1200" height="800" fill="url(#oa-fade)" />
+          </mask>
+        </defs>
+
+        <g mask="url(#oa-mask)" transform="rotate(-34 600 400)">
+          <g class="only-dark" filter="url(#oa-blur)">
+            <rect x="250" y="-300" width="55" height="1400" fill="url(#oa-beam-d)" opacity="0.3" />
+            <rect x="370" y="-300" width="105" height="1400" fill="url(#oa-beam-d)" opacity="0.5" />
+            <rect x="520" y="-300" width="75" height="1400" fill="url(#oa-beam-d)" opacity="0.36" />
+            <rect x="640" y="-300" width="150" height="1400" fill="url(#oa-beam-d)" opacity="0.55" />
+            <rect x="770" y="-300" width="65" height="1400" fill="url(#oa-beam-d)" opacity="0.32" />
+            <rect x="880" y="-300" width="115" height="1400" fill="url(#oa-beam-d)" opacity="0.46" />
+          </g>
+          <g class="only-light" filter="url(#oa-blur)">
+            <rect x="250" y="-300" width="55" height="1400" fill="url(#oa-beam-l)" opacity="0.5" />
+            <rect x="370" y="-300" width="105" height="1400" fill="url(#oa-beam-l)" opacity="0.75" />
+            <rect x="520" y="-300" width="75" height="1400" fill="url(#oa-beam-l)" opacity="0.55" />
+            <rect x="640" y="-300" width="150" height="1400" fill="url(#oa-beam-l)" opacity="0.8" />
+            <rect x="770" y="-300" width="65" height="1400" fill="url(#oa-beam-l)" opacity="0.5" />
+            <rect x="880" y="-300" width="115" height="1400" fill="url(#oa-beam-l)" opacity="0.7" />
+          </g>
+        </g>
+      </svg>
+
+      <div
+        class="pointer-events-none absolute inset-0"
+        style="background: radial-gradient(ellipse 52% 46% at 50% 50%, transparent 22%, var(--color-ink) 82%); opacity: 0.85;"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative mx-auto max-w-4xl px-6 py-40 text-center">
+        <h1
+          data-reveal
+          class="font-display text-6xl leading-[1.02] font-bold tracking-tight text-fog md:text-8xl"
+        >
+          Your shortcut to
+          <br class="hidden md:block" />
+          every restore.
+        </h1>
+        <p
+          data-reveal
+          style="--reveal-delay: 120ms"
+          class="mx-auto mt-8 max-w-xl text-base leading-relaxed text-mute md:text-lg"
+        >
+          A stream-native backup engine. Chunked, deduplicated, encrypted.
+          Fast, verifiable and yours.
+        </p>
+        <div
+          data-reveal
+          style="--reveal-delay: 240ms"
+          class="mt-10 flex items-center justify-center gap-4"
+        >
+          <button
+              type="button"
+              data-waitlist="OmniArk"
+              class="rounded-lg bg-fog px-6 py-3 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+          >
+  Join waitlist
+          </button>
+          <a
+            href="#engine"
+            class="rounded-lg border border-line bg-surface px-6 py-3 text-sm font-medium text-mute transition-colors hover:text-fog"
+          >
+            Inside the engine
+          </a>
+        </div>
+        <p data-reveal style="--reveal-delay: 340ms" class="mt-12 text-[13.5px] leading-relaxed text-dim">
+          One engine for
+          <span class="font-medium text-mute">filesystems, S3, block devices, PostgreSQL, MongoDB, Kubernetes</span>,
+          and whatever comes next.
+        </p>
+      </div>
+
+    </section>
+
+    <section id="engine" class="scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-6 py-28">
+        <p data-reveal class="text-center font-mono text-[12px] tracking-[0.2em] text-dim uppercase">
+          walk → chunk → hash → dedup → compress → encrypt → pack → write
+        </p>
+        <h2 data-reveal style="--reveal-delay: 100ms" class="mx-auto mt-8 max-w-2xl text-center font-display text-3xl font-semibold tracking-tight text-fog md:text-4xl">
+          One pass. Eight stages. Zero wasted bytes.
+        </h2>
+
+        <div class="mt-20">
+          {
+            features.map((f) => (
+              <div data-reveal class="grid gap-4 border-t border-line py-10 md:grid-cols-12 md:gap-10">
+                <span class="font-mono text-[12px] text-dim md:col-span-1">{f.n}</span>
+                <h3 class="font-display text-lg font-semibold tracking-tight text-fog md:col-span-4">
+                  {f.title}
+                </h3>
+                <p class="text-sm leading-relaxed text-mute md:col-span-7">{f.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="hairline-t">
+      <div class="mx-auto max-w-6xl px-6 py-32 text-center">
+        <h2 data-reveal class="mx-auto max-w-2xl font-display text-4xl font-bold tracking-tight text-fog md:text-5xl">
+          Your second backup should be nearly free.
+        </h2>
+        <p data-reveal style="--reveal-delay: 120ms" class="mx-auto mt-6 max-w-md leading-relaxed text-mute">
+          Deduplication is not a feature of OmniArk. It is the physics it runs
+          on.
+        </p>
+        <div data-reveal style="--reveal-delay: 240ms" class="mt-10">
+          <button
+              type="button"
+              data-waitlist="OmniArk"
+              class="inline-block rounded-lg bg-fog px-8 py-3 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+          >
+  Join waitlist
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    svg animate {
+      display: none;
+    }
+  }
+</style>
