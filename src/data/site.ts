@@ -8,12 +8,11 @@ export const site = {
   phone: "+250 789 567 629",
   phoneHref: "tel:+250789567629",
   trialDays: 30,
-  // The OmniArk portal (accounts, trials, licences, downloads). Flip `portalLive`
-  // once omniark.app is serving, and "Start free trial" / "Sign in" point there.
-  portalUrl: "https://omniark.app",
+  // Customer accounts belong to the company, not to one product: every product site's
+  // "Sign in" leads here. Until accounts open, the page says how to reach us.
+  signInUrl: "/sign-in",
   // OmniArk has its own site; every "OmniArk" link on this one points there.
   omniarkUrl: "https://omniark.app",
-  portalLive: false,
 };
 
 export type Intent = "demo" | "trial" | "quote" | "cloud" | "owl" | "services" | "general";
@@ -77,5 +76,3 @@ export const nav = [
 ] as const;
 
 export const contactHref = (intent: Intent) => `/contact?intent=${intent}`;
-
-export const trialHref = () => (site.portalLive ? `${site.portalUrl}/signup` : contactHref("trial"));

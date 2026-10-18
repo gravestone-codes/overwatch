@@ -16,5 +16,5 @@ export default defineConfig({
   },
   devToolbar: { enabled: false },
   adapter: vercel(),
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.includes("/sign-in") })],
 });

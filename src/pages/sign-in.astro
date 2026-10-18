@@ -1,0 +1,12 @@
+---
+import Site from "@/layouts/Site.astro";
+import PageHead from "@/components/site/PageHead.astro";
+import { site } from "@/data/site";
+---
+
+<Site title="Sign in" description="One Overwatch Labs account for every product." noindex>
+  <PageHead title="Accounts open soon." lede="One account for every Overwatch Labs product, with your licences, trials and downloads. Until then, our engineers handle them for you.">
+    <a class="btn btn-solid" href={`mailto:${site.email}`}>Email us</a>
+    <a class="btn btn-line" href={site.phoneHref}>Call {site.phone}</a>
+  </PageHead>
+</Site>

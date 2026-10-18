@@ -3,7 +3,7 @@ import Site from "@/layouts/Site.astro";
 import PageHead from "@/components/site/PageHead.astro";
 import Routes from "@/components/site/Routes.astro";
 import { services, products } from "@/data/company";
-import { site, contactHref, trialHref } from "@/data/site";
+import { site, contactHref } from "@/data/site";
 
 const included = [
   "Every OmniArk feature",
@@ -40,7 +40,7 @@ const faq = [
         </dl>
         <div class="actions">
           <a class="btn btn-light" href={contactHref("quote")}>Get a quote</a>
-          <a class="btn btn-line" href={trialHref()}>Start a {site.trialDays}-day free trial</a>
+          <a class="btn btn-line" href={contactHref("trial")}>Start a {site.trialDays}-day free trial</a>
         </div>
       </div>
 

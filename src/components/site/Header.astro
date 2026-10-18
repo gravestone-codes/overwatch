@@ -88,7 +88,7 @@ const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopene
         <svg class="i-moon" width="16" height="16" aria-hidden="true"><use href="#moon"></use></svg>
         <svg class="i-sun" width="16" height="16" aria-hidden="true"><use href="#sun"></use></svg>
       </button>
-      <a class="nav-link" href={site.portalUrl}>Sign in</a>
+      <a class="nav-link" href={site.signInUrl}>Sign in</a>
       <a class="btn btn-solid btn-sm" href={contactHref("demo")}>Book a demo</a>
       <button class="menu-btn" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Open menu"><i></i><i></i></button>
     </div>
@@ -114,7 +114,7 @@ const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopene
     <div class="mnav-actions">
       <a class="btn btn-solid" href={contactHref("demo")}>Book a demo</a>
       <a class="btn btn-line" href={contactHref("quote")}>Get a quote</a>
-      <a class="mnav-signin" href={site.portalUrl}>Sign in</a>
+      <a class="mnav-signin" href={site.signInUrl}>Sign in</a>
     </div>
     <div class="mnav-theme">
       <span id="appearance-label">Appearance</span>
