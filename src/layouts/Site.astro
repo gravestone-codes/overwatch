@@ -1,4 +1,5 @@
 ---
+import { Font } from "astro:assets";
 import "@/styles/site.css";
 import Header from "@/components/site/Header.astro";
 import Footer from "@/components/site/Footer.astro";
@@ -70,15 +71,14 @@ const structured = {
         if (t) document.documentElement.dataset.theme = t;
       } catch (e) {}
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&family=Schibsted+Grotesk:wght@500..900&display=swap"
-    />
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-body" preload />
+    <Font cssVariable="--font-mono" />
     <slot name="head" />
   </head>
   <body>
+    {/* Cloudflare's email obfuscation rewrites mailto links and adds a script that holds up the first paint; these markers turn it off. */}
+    <!--email_off-->
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
       <symbol id="logo" viewBox="0 0 256 256">
         <rect class="logo-bg" width="256" height="256" rx="60"></rect>
@@ -166,5 +166,6 @@ const structured = {
       document.fonts.ready.then(fitWordmark);
       window.addEventListener("resize", fitWordmark);
     </script>
+    <!--email_on-->
   </body>
 </html>
