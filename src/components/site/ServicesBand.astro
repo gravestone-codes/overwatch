@@ -1,0 +1,88 @@
+---
+import { contactHref } from "@/data/site";
+
+interface Props {
+  title?: string;
+  lede?: string;
+}
+const { title = "Run it yourself, or let us run it for you.", lede } = Astro.props;
+
+// Who does what, for each way of working. `us` lists the modes in which we take the task.
+const tasks = [
+  { task: "Installation and setup", us: ["install", "managed"] },
+  { task: "Daily monitoring", us: ["managed"] },
+  { task: "Tests and health checks", us: ["managed"] },
+  { task: "Acting on alerts", us: ["managed"] },
+  { task: "Monthly reports", us: ["managed"] },
+];
+const included = ["Support and on-site help", "Operator training"];
+const modes = [
+  { id: "self", label: "You run it", note: "Your team installs and runs it. We support and train you." },
+  { id: "install", label: "We install it", note: "Our technicians set it up on site, then your team takes over." },
+  { id: "managed", label: "We run it", note: "We operate it under your licence. You get the monthly report." },
+];
+const start = "install";
+---
+
+<section class="section band" id="ways">
+  <div class="wrap svc-grid">
+    <div class="svc-intro">
+      <h2 class="h2">{title}</h2>
+      {lede && <p>{lede}</p>}
+      <div class="modes" role="radiogroup" aria-label="How much to hand over">
+        {
+          modes.map((m) => (
+            <>
+              <input type="radio" name="mode" id={`mode-${m.id}`} value={m.id} checked={m.id === start} data-note={m.note} />
+              <label for={`mode-${m.id}`}>{m.label}</label>
+            </>
+          ))
+        }
+      </div>
+      <p class="mode-note" id="mode-note" aria-live="polite">{modes.find((m) => m.id === start)!.note}</p>
+      <a class="btn btn-light" href={contactHref("services")}>Talk to an engineer</a>
+    </div>
+
+    <div class="duty" id="duty">
+      <div class="duty-head"><span class="label">Who does what</span><span class="duty-cols"><span class="label">You</span><span class="label">Us</span></span></div>
+      {
+        tasks.map((t) => (
+          <div class:list={["duty-row", t.us.includes(start) && "is-us"]} data-us={t.us.join(" ")}>
+            <span class="task">{t.task}</span>
+            <span class="knob"><i /></span>
+          </div>
+        ))
+      }
+      <div class="duty-group"><span class="label">Included with every licence</span></div>
+      {
+        included.map((t) => (
+          <div class="duty-row is-us is-fixed" data-us="self install managed">
+            <span class="task">{t}</span>
+            <span class="knob"><i /></span>
+          </div>
+        ))
+      }
+      <div class="duty-foot"><span class="label">Tasks</span><span class="label" id="duty-count"></span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const rows = document.querySelectorAll<HTMLElement>("#duty .duty-row");
+  const note = document.getElementById("mode-note")!;
+  const count = document.getElementById("duty-count")!;
+  function setMode(input: HTMLInputElement) {
+    let us = 0;
+    rows.forEach((row, i) => {
+      const on = row.dataset.us!.split(" ").includes(input.value);
+      row.style.setProperty("--delay", `${i * 50}ms`);
+      row.classList.toggle("is-us", on);
+      if (on) us += 1;
+    });
+    note.textContent = input.dataset.note!;
+    count.textContent = `You ${rows.length - us}, us ${us}`;
+  }
+  const inputs = document.querySelectorAll<HTMLInputElement>('input[name="mode"]');
+  inputs.forEach((input) => input.addEventListener("change", () => setMode(input)));
+  setMode([...inputs].find((i) => i.checked)!);
+</script>

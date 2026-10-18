@@ -1,0 +1,50 @@
+---
+import Site from "@/layouts/Site.astro";
+import PageHead from "@/components/site/PageHead.astro";
+import { site } from "@/data/site";
+
+const how = [
+  { title: "Own what you build", body: "Take work from design to production, and keep it running." },
+  { title: "Correctness first", body: "We test, verify and prove before we ship." },
+  { title: "Hard problems", body: "Storage, cryptography and networks, end to end." },
+  { title: "Work people rely on", body: "Hospitals, banks and schools depend on what you build." },
+];
+---
+
+<Site title="Careers" description="Build software that has to work. Overwatch Labs is looking for engineers who care about correctness, security and craft.">
+  <PageHead title="Build software that has to work." lede="We're looking for engineers who care about correctness, security and craft." />
+
+  <section class="section tight">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2">How we work.</h2>
+      </div>
+      <div class="points" style="--cols: 4">
+        {
+          how.map((h) => (
+            <div>
+              <h3 class="h3">{h.title}</h3>
+              <p>{h.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2">Open roles.</h2>
+      </div>
+      <div class="card card-row">
+        <div>
+          <h3 class="h3">No roles are listed right now.</h3>
+          <p>If you work in systems programming, storage, networking or security, we'd still like to hear from you. Send a short note and something you've built.</p>
+        </div>
+        <a class="btn btn-solid" href={`mailto:${site.email}?subject=Careers`}>Email us your work</a>
+      </div>
+      <p class="fine">Or write to {site.email}.</p>
+    </div>
+  </section>
+</Site>

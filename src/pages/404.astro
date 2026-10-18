@@ -1,0 +1,11 @@
+---
+import Site from "@/layouts/Site.astro";
+import PageHead from "@/components/site/PageHead.astro";
+---
+
+<Site title="Page not found" description="This page doesn't exist." noindex>
+  <PageHead title="We couldn't find that page." lede="It may have moved or never existed. Start from the home page, or tell us what you were looking for.">
+    <a class="btn btn-solid" href="/">Go to the home page</a>
+    <a class="btn btn-line" href="/contact?intent=general">Contact us</a>
+  </PageHead>
+</Site>

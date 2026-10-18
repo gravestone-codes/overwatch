@@ -1,0 +1,34 @@
+---
+import { products } from "@/data/company";
+
+// The product bands: each product in its own colour, the one loud element on the site.
+const art = { bays: 6, off: 5, ports: 16 } as const;
+---
+
+<div class="lineup" id="products">
+  <div class="lineup-head">
+    <span class="label">Products</span>
+    <span class="label">{products.filter((p) => p.available).length} available, {products.filter((p) => !p.available).length} in development</span>
+  </div>
+  {
+    products.map((p) => (
+      <a class={`line c-${p.key}`} href={p.href} {...(p.external ? { target: "_blank", rel: "noopener" } : {})}>
+        <span class="line-name">{p.name}</span>
+        <span class="line-copy">
+          <span class="line-meta">
+            <span class="label">{p.category}</span>
+            <span class:list={["label status", !p.available && "is-soon"]}>{p.available ? "Available" : "In development"}</span>
+          </span>
+          <p>{p.line}</p>
+          {!p.available && <span class="sr-only">Get notified when {p.name} opens</span>}
+        </span>
+        <span class={`art art-${p.art}`} aria-hidden="true">
+          {Array.from({ length: art[p.art] }, () => <i />)}
+        </span>
+        <span class="line-end" aria-hidden="true">
+          <svg width="18" height="18"><use href={p.external ? "#out" : "#arrow"} /></svg>
+        </span>
+      </a>
+    ))
+  }
+</div>

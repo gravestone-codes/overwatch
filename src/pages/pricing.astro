@@ -1,0 +1,152 @@
+---
+import Site from "@/layouts/Site.astro";
+import PageHead from "@/components/site/PageHead.astro";
+import Routes from "@/components/site/Routes.astro";
+import { services, products } from "@/data/company";
+import { site, contactHref, trialHref } from "@/data/site";
+
+const included = [
+  "Every OmniArk feature",
+  "Support from our engineers",
+  "On-site help for serious incidents",
+  "Operator training for your team",
+  "Every update and new version",
+  "Unlimited users and storage",
+];
+const counters = [
+  { id: "servers", label: "Physical servers" },
+  { id: "vms", label: "Virtual machines" },
+  { id: "dbs", label: "Databases" },
+];
+const later = products.filter((p) => !p.available);
+const faq = [
+  { q: "What counts as a protected system?", a: "Each server, virtual machine or database you back up. A system you stop protecting stops counting 30 days after its last backup." },
+  { q: "Do I pay extra for storage or users?", a: "No. Use as much of your own storage as you like, and give access to as many people as you need." },
+  { q: "Is there a minimum contract?", a: "Licences run for a year. Talk to us about multi-year terms or budgets tied to your financial year." },
+  { q: "What happens after the free trial?", a: `After ${site.trialDays} days you choose a licence. Every backup made during the trial stays yours and stays restorable.` },
+];
+---
+
+<Site title="Pricing" description="OmniArk is priced per protected system. Support, on-site help, training and every update are included in the licence.">
+  <PageHead title="One licence. Everything included." lede="OmniArk is priced by the number of systems you protect. Support, on-site help, training and updates come with it." />
+
+  <section class="section tight">
+    <div class="wrap price-grid">
+      <div class="licence">
+        <h2 class="h3"><span class="mark c-oa">Om</span>OmniArk licence</h2>
+        <p>Per protected system, billed yearly and sized with you.</p>
+        <dl class="ledger">
+          {included.map((i) => <div><dt>{i}</dt><dd>Included</dd></div>)}
+        </dl>
+        <div class="actions">
+          <a class="btn btn-light" href={contactHref("quote")}>Get a quote</a>
+          <a class="btn btn-line" href={trialHref()}>Start a {site.trialDays}-day free trial</a>
+        </div>
+      </div>
+
+      <form class="estimator" id="estimator" aria-labelledby="est-title">
+        <h2 class="h3" id="est-title">Size your quote.</h2>
+        <p>Tell us roughly what you run, and we'll price exactly that.</p>
+        <div class="steppers">
+          {
+            counters.map((c) => (
+              <div class="stepper">
+                <label for={`est-${c.id}`}>{c.label}</label>
+                <div>
+                  <button type="button" data-step="-1" data-for={c.id} aria-label={`Fewer ${c.label.toLowerCase()}`}>−</button>
+                  <input id={`est-${c.id}`} name={c.id} type="number" inputmode="numeric" min="0" max="9999" value="0" />
+                  <button type="button" data-step="1" data-for={c.id} aria-label={`More ${c.label.toLowerCase()}`}>+</button>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div class="est-total">
+          <div>
+            <span class="label">Systems to protect</span>
+            <strong id="est-total" aria-live="polite">0</strong>
+          </div>
+          <a class="btn btn-solid" id="est-cta" href={contactHref("quote")}>Get my quote</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2">Services and what's next.</h2>
+        <p>Services sit around your licence. Products in development will be priced when they open.</p>
+      </div>
+      <div class="rows">
+        {
+          services.map((s) => (
+            <div class="row">
+              <h3 class="h3">{s.title}</h3>
+              <p>{s.body}</p>
+              <span class="price">{s.price}</span>
+            </div>
+          ))
+        }
+        {
+          later.map((p) => (
+            <div class="row">
+              <h3 class="h3"><span class={`mark c-${p.key}`}>{p.name.slice(0, 2)}</span>{p.name}</h3>
+              <p>{p.line} In development.</p>
+              <a class="price" href={p.href}>Get notified</a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap faq-grid">
+      <h2 class="h2">Pricing questions.</h2>
+      <div class="faq">
+        {
+          faq.map((f) => (
+            <details name="faq">
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Routes title="Get a clear price." lede="Tell us what you run. You'll usually have a price within one working day." />
+</Site>
+
+<script>
+  const form = document.getElementById("estimator") as HTMLFormElement;
+  const total = document.getElementById("est-total")!;
+  const cta = document.getElementById("est-cta") as HTMLAnchorElement;
+  const inputs = form.querySelectorAll<HTMLInputElement>("input[type=number]");
+  // The contact form offers these bands, so the quote request arrives pre-filled.
+  const band = (n: number) => (n <= 5 ? "1–5" : n <= 20 ? "6–20" : n <= 50 ? "21–50" : n <= 200 ? "51–200" : "More than 200");
+  function update() {
+    let n = 0;
+    inputs.forEach((i) => {
+      const v = Math.max(0, Math.min(9999, Math.floor(Number(i.value) || 0)));
+      i.value = String(v);
+      n += v;
+    });
+    total.textContent = String(n);
+    const url = new URL("/contact", location.origin);
+    url.searchParams.set("intent", "quote");
+    if (n > 0) url.searchParams.set("systems", band(n));
+    cta.href = url.pathname + url.search;
+  }
+  form.addEventListener("input", update);
+  form.addEventListener("submit", (e) => e.preventDefault());
+  form.querySelectorAll<HTMLButtonElement>("[data-step]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const input = form.elements.namedItem(b.dataset.for!) as HTMLInputElement;
+      input.value = String((Number(input.value) || 0) + Number(b.dataset.step));
+      update();
+    }),
+  );
+</script>

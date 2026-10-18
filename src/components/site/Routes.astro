@@ -1,0 +1,41 @@
+---
+import { site, contactHref } from "@/data/site";
+
+interface Props {
+  title?: string;
+  lede?: string;
+}
+const { title = "Tell us what you need.", lede = "A real person usually replies within one working day." } = Astro.props;
+const routes = [
+  { title: "Book a demo", body: "See OmniArk on your own systems.", href: contactHref("demo"), primary: true },
+  { title: "Start a free trial", body: `OmniArk, free for ${site.trialDays} days.`, href: contactHref("trial") },
+  { title: "Get a quote", body: "Licences and services for your setup.", href: contactHref("quote") },
+  { title: "Take the readiness check", body: "Eight questions about your backups.", href: "/readiness" },
+];
+---
+
+<section class="section panel-bg" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-copy">
+      <h2 class="h2">{title}</h2>
+      <p>{lede}</p>
+      <dl class="reach">
+        <div><dt class="label">Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+        <div><dt class="label">Phone</dt><dd><a href={site.phoneHref}>{site.phone}</a></dd></div>
+      </dl>
+    </div>
+    <ul class="routes">
+      {
+        routes.map((r) => (
+          <li>
+            <a class:list={["route", r.primary && "is-primary"]} href={r.href}>
+              <h3>{r.title}</h3>
+              <p>{r.body}</p>
+              <span class="arr"><svg width="16" height="16" aria-hidden="true"><use href="#arrow" /></svg></span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

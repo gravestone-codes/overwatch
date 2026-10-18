@@ -1,0 +1,260 @@
+---
+import Site from "@/layouts/Site.astro";
+import { intents, site, type Intent } from "@/data/site";
+import { industries } from "@/data/industries";
+
+// The first five are always offered; the in-development products and services appear when a link asks for them.
+const options: { intent: Intent; hint: string; extra?: boolean }[] = [
+  { intent: "demo", hint: "A 30-minute walkthrough on your systems" },
+  { intent: "trial", hint: `OmniArk free for ${site.trialDays} days` },
+  { intent: "quote", hint: "A clear price within a working day" },
+  { intent: "services", hint: "Installation or managed operations" },
+  { intent: "general", hint: "Anything else" },
+  { intent: "cloud", hint: "Ark Cloud is in development", extra: true },
+  { intent: "owl", hint: "OWL is in development", extra: true },
+];
+// Sizes are a scale, so they read left to right with a stack of rack units that grows; "Not sure" sits apart.
+const sizes = [
+  { value: "1–5", label: "1–5" },
+  { value: "6–20", label: "6–20" },
+  { value: "21–50", label: "21–50" },
+  { value: "51–200", label: "51–200" },
+  { value: "More than 200", label: "200+" },
+];
+const steps = ["What you need", "Your organisation", "Your details"];
+const d = intents.demo;
+---
+
+<Site title="Contact" description="Book a demo, start a free trial, get a quote or ask a question. A person at Overwatch Labs replies within one working day.">
+  <section class="page-head">
+    <div class="wrap contact-grid">
+      <div>
+        <h1 id="intent-title" style="font-size: clamp(2.5rem, 5.2vw, 4.25rem)">{d.title}</h1>
+        <p id="intent-lede" class="lede" style="margin-top: 1.5rem">{d.lede}</p>
+        <ol class="steps-next">
+          <li><div><strong>You tell us what you run</strong><span>Three short steps, about a minute.</span></div></li>
+          <li><div><strong>An engineer gets back to you</strong><span>Usually within one working day.</span></div></li>
+          <li><div><strong>We meet on your terms</strong><span>On a call, or at your premises.</span></div></li>
+        </ol>
+        <dl class="reach">
+          <div><dt class="label">Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+          <div><dt class="label">Phone</dt><dd><a href={site.phoneHref}>{site.phone}</a></dd></div>
+        </dl>
+      </div>
+
+      <div class="form-card">
+        <div id="progress">
+          <div class="progress-head">
+            <p aria-live="polite" id="step-name">{steps[0]}</p>
+            <p class="muted">Step <span id="step-num">1</span> of {steps.length}</p>
+          </div>
+          <div class="progress-bars" aria-hidden="true">
+            {steps.map((_, i) => <span><i data-bar={i} class:list={[i === 0 && "is-on"]} /></span>)}
+          </div>
+        </div>
+
+        <form id="lead-form" novalidate>
+          <input type="text" name="company_website" hidden tabindex="-1" autocomplete="off" />
+
+          <fieldset class="form-step is-active">
+            <legend>What can we help with?</legend>
+            <div class="opts">
+              {
+                options.map((o) => (
+                  <label class="opt" data-option={o.intent} hidden={o.extra}>
+                    <input type="radio" name="intent" value={o.intent} checked={o.intent === "demo"} />
+                    <span>
+                      <strong>{intents[o.intent].label}</strong>
+                      <small>{o.hint}</small>
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+            <div class="form-nav end"><button type="submit" class="btn btn-solid">Continue</button></div>
+          </fieldset>
+
+          <fieldset class="form-step">
+            <legend>Tell us about your organisation</legend>
+            <label class="field-label" style="margin-top: 1.5rem">
+              Organisation name
+              <input class="field" name="organisation" autocomplete="organization" placeholder="City General Hospital" />
+            </label>
+            <div style="margin-top: 1.5rem">
+              <p class="field-label" id="industry-label">Industry</p>
+              <div class="choices" role="radiogroup" aria-labelledby="industry-label">
+                {
+                  [...industries.map((i) => ({ value: i.short, label: i.name })), { value: "Other", label: "Something else" }].map((o) => (
+                    <label class="choice"><input type="radio" name="industry" value={o.value} /><span>{o.label}</span></label>
+                  ))
+                }
+              </div>
+            </div>
+            <div style="margin-top: 1.5rem">
+              <p class="field-label" id="systems-label">Systems to protect</p>
+              <div class="scale" role="radiogroup" aria-labelledby="systems-label">
+                {
+                  sizes.map((s, i) => (
+                    <label>
+                      <input type="radio" name="systems" value={s.value} />
+                      <span>
+                        <span class="units" aria-hidden="true">{Array.from({ length: i + 1 }, () => <i />)}</span>
+                        {s.label}
+                      </span>
+                    </label>
+                  ))
+                }
+              </div>
+              <label class="choice quiet"><input type="radio" name="systems" value="Not sure yet" /><span>Not sure yet</span></label>
+            </div>
+            <div class="form-nav">
+              <button type="button" class="back" data-back>Back</button>
+              <button type="submit" class="btn btn-solid">Continue</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-step">
+            <legend>Where can we reach you?</legend>
+            <div class="form-grid">
+              <label class="field-label">Your name<input class="field" name="name" autocomplete="name" /></label>
+              <label class="field-label">Work email<input class="field" name="email" type="email" autocomplete="email" /></label>
+              <label class="field-label full">Phone <small>(optional)</small><input class="field" name="phone" type="tel" autocomplete="tel" /></label>
+              <label class="field-label full">Anything we should know? <small>(optional)</small><textarea class="field" name="message" rows="3" placeholder="What you run today, what worries you most, deadlines"></textarea></label>
+            </div>
+            <div class="form-nav">
+              <button type="button" class="back" data-back>Back</button>
+              <button type="submit" class="btn btn-solid" id="submit"><span id="submit-label">{d.submit}</span></button>
+            </div>
+            <p class="fine">We only use your details to answer you. <a class="link" href="/privacy">Privacy notice</a></p>
+          </fieldset>
+
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+        </form>
+
+        <div class="done" id="form-success" hidden tabindex="-1">
+          <span class="tick"><svg width="22" height="22" aria-hidden="true"><use href="#check" /></svg></span>
+          <h2>Thank you<span id="success-name"></span>.</h2>
+          <p>An engineer will contact you, usually within one working day. Need us sooner? Call <a class="link" href={site.phoneHref}>{site.phone}</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline type="application/json" id="intents-data" set:html={JSON.stringify(intents)} />
+  <script is:inline type="application/json" id="steps-data" set:html={JSON.stringify(steps)} />
+</Site>
+
+<script>
+  import { track } from "@vercel/analytics";
+
+  type Copy = { label: string; title: string; lede: string; submit: string };
+  const copy: Record<string, Copy> = JSON.parse(document.getElementById("intents-data")!.textContent!);
+  const stepNames: string[] = JSON.parse(document.getElementById("steps-data")!.textContent!);
+  const form = document.getElementById("lead-form") as HTMLFormElement;
+  const stepEls = [...form.querySelectorAll<HTMLFieldSetElement>(".form-step")];
+  const errorBox = document.getElementById("form-error")!;
+  const submit = document.getElementById("submit") as HTMLButtonElement;
+  const submitLabel = document.getElementById("submit-label")!;
+  let current = 0;
+
+  function setIntent(intent: string) {
+    const key = copy[intent] ? intent : "general";
+    const radio = form.querySelector<HTMLInputElement>(`input[name="intent"][value="${key}"]`);
+    if (radio) {
+      radio.checked = true;
+      radio.closest<HTMLElement>("[data-option]")!.hidden = false;
+    }
+    document.getElementById("intent-title")!.textContent = copy[key].title;
+    document.getElementById("intent-lede")!.textContent = copy[key].lede;
+    submitLabel.textContent = copy[key].submit;
+  }
+
+  function clearError() {
+    errorBox.hidden = true;
+    form.querySelectorAll("[aria-invalid]").forEach((el) => el.removeAttribute("aria-invalid"));
+  }
+  function showError(msg: string, name?: string) {
+    clearError();
+    errorBox.textContent = msg;
+    errorBox.hidden = false;
+    if (name) {
+      const el = form.elements.namedItem(name) as HTMLElement | null;
+      el?.setAttribute("aria-invalid", "true");
+      el?.focus();
+    }
+  }
+
+  function go(to: number, focus = true) {
+    clearError();
+    stepEls.forEach((el, i) => el.classList.toggle("is-active", i === to));
+    current = to;
+    document.getElementById("step-num")!.textContent = String(to + 1);
+    document.getElementById("step-name")!.textContent = stepNames[to];
+    document.querySelectorAll<HTMLElement>("[data-bar]").forEach((b) => b.classList.toggle("is-on", Number(b.dataset.bar) <= to));
+    if (focus) stepEls[to].querySelector<HTMLElement>("input:not([type=radio]), textarea, input:checked")?.focus({ preventScroll: true });
+  }
+
+  // Returns the problem with a step, or nothing when it can move on.
+  function check(step: number, data: Record<string, string>): [string, string] | undefined {
+    if (step === 1 && (data.organisation ?? "").trim().length < 2) return ["Enter your organisation's name.", "organisation"];
+    if (step === 2) {
+      if ((data.name ?? "").trim().length < 2) return ["Enter your name.", "name"];
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((data.email ?? "").trim())) return ["That email address doesn't look right. Check it and try again.", "email"];
+    }
+  }
+
+  // Links like /contact?intent=quote&systems=6–20 arrive pre-filled, and skip the question they already answer.
+  const params = new URLSearchParams(location.search);
+  const preset = params.get("intent");
+  setIntent(preset ?? "demo");
+  const sys = params.get("systems");
+  if (sys) {
+    const r = form.querySelector<HTMLInputElement>(`input[name="systems"][value="${CSS.escape(sys)}"]`);
+    if (r) r.checked = true;
+  }
+  if (preset && copy[preset]) go(1, false);
+
+  form.querySelectorAll<HTMLInputElement>('input[name="intent"]').forEach((r) =>
+    r.addEventListener("change", () => {
+      setIntent(r.value);
+      const url = new URL(location.href);
+      url.searchParams.set("intent", r.value);
+      history.replaceState(null, "", url);
+    }),
+  );
+  form.querySelectorAll("[data-back]").forEach((b) => b.addEventListener("click", () => go(Math.max(0, current - 1))));
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    const problem = check(current, data);
+    if (problem) return showError(...problem);
+    if (current < stepEls.length - 1) return go(current + 1);
+
+    data.page = location.pathname + location.search;
+    submit.disabled = true;
+    const label = submitLabel.textContent;
+    submitLabel.textContent = "Sending…";
+    try {
+      const res = await fetch("/api/lead", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || !json.ok) throw json;
+      track("lead_submitted", { intent: data.intent });
+      form.hidden = true;
+      document.getElementById("progress")!.hidden = true;
+      document.getElementById("success-name")!.textContent = `, ${data.name.trim().split(/\s+/)[0]}`;
+      const ok = document.getElementById("form-success")!;
+      ok.hidden = false;
+      ok.focus();
+    } catch (err) {
+      const x = err as { error?: string; field?: string };
+      // The server may flag a field from an earlier step; take the visitor back to it.
+      const owner = x?.field ? stepEls.findIndex((s) => s.querySelector(`[name="${x.field}"]`)) : -1;
+      if (owner >= 0 && owner !== current) go(owner, false);
+      showError(x?.error ?? "Your message wasn't sent. Check your connection and try again.", x?.field);
+    } finally {
+      submit.disabled = false;
+      submitLabel.textContent = label;
+    }
+  });
+</script>

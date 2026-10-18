@@ -1,0 +1,41 @@
+---
+import Site from "@/layouts/Site.astro";
+import PageHead from "@/components/site/PageHead.astro";
+import ServicesBand from "@/components/site/ServicesBand.astro";
+import Routes from "@/components/site/Routes.astro";
+import { services } from "@/data/company";
+import { contactHref } from "@/data/site";
+---
+
+<Site title="Services" description="Installation, managed operations, support and training from the engineers who build Overwatch Labs products.">
+  <PageHead title="Help around every product." lede="Installation, managed operations, support and training, from the engineers who build our products.">
+    <a class="btn btn-solid" href={contactHref("services")}>Talk to an engineer</a>
+    <a class="btn btn-line" href={contactHref("quote")}>Get a quote</a>
+  </PageHead>
+
+  <ServicesBand lede="Pick how much you hand over. You can change your mind later." />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2">What each service covers.</h2>
+      </div>
+      <div class="points" style="--cols: 3">
+        {
+          services.map((s) => (
+            <div id={s.id} style="scroll-margin-top: 6rem">
+              <h3 class="h3">{s.title}</h3>
+              <p>{s.body}</p>
+              <ul class="ticks">
+                {s.points.map((p) => <li>{p}</li>)}
+              </ul>
+              <p class="label" style="margin-top: 1.25rem">{s.price}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Routes />
+</Site>

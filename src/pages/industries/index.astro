@@ -1,0 +1,16 @@
+---
+import Site from "@/layouts/Site.astro";
+import PageHead from "@/components/site/PageHead.astro";
+import Sectors from "@/components/site/Sectors.astro";
+import Routes from "@/components/site/Routes.astro";
+---
+
+<Site title="Industries" description="How Overwatch Labs products protect businesses, banks, hospitals, government and schools.">
+  <PageHead title="Built for the institutions people depend on." lede="Every sector has its own worst day. Each page shows how OmniArk handles yours." />
+  <section class="section tight">
+    <div class="wrap">
+      <Sectors />
+    </div>
+  </section>
+  <Routes />
+</Site>

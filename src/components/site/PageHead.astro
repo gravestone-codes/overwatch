@@ -1,0 +1,36 @@
+---
+// Every inner page opens like the home page: the headline on the left, the lede and actions bottom-right.
+interface Props {
+  title: string;
+  lede?: string;
+  crumbs?: { label: string; href: string }[];
+  /** This page's name in the breadcrumb, when the headline is a sentence rather than a name. */
+  here?: string;
+}
+const { title, lede, crumbs, here = title } = Astro.props;
+---
+
+<section class="page-head">
+  <div class="wrap">
+    {
+      crumbs && (
+        <nav class="crumbs" aria-label="Breadcrumb">
+          {crumbs.map((c) => (
+            <>
+              <a href={c.href}>{c.label}</a>
+              <span aria-hidden="true">/</span>
+            </>
+          ))}
+          <span aria-current="page">{here}</span>
+        </nav>
+      )
+    }
+    <div class="split">
+      <h1 set:html={title} />
+      <div>
+        {lede && <p class="lede">{lede}</p>}
+        {Astro.slots.has("default") && <div class="actions"><slot /></div>}
+      </div>
+    </div>
+  </div>
+</section>

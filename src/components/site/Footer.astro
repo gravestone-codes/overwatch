@@ -1,0 +1,38 @@
+---
+import { footer } from "@/data/company";
+import { site } from "@/data/site";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="/">
+          <svg width="28" height="28" aria-hidden="true"><use href="#logo"></use></svg>
+          <span>Overwatch Labs</span>
+        </a>
+        <p>We design, build and run software products.</p>
+      </div>
+      {
+        footer.map((col) => (
+          <nav class="footer-col" aria-label={col.title}>
+            <span class="label">{col.title}</span>
+            {col.links.map((l) => (
+              <a href={l.href} {...("external" in l && l.external ? { target: "_blank", rel: "noopener" } : {})}>
+                {l.label}
+                {"soon" in l && l.soon && <small class="soon-note">In development</small>}
+              </a>
+            ))}
+          </nav>
+        ))
+      }
+    </div>
+    <p class="wordmark" id="wordmark" aria-hidden="true"><span>Overwatch Labs</span></p>
+    <div class="legal">
+      <span>© {year} Overwatch Labs. All rights reserved.</span>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </div>
+</footer>

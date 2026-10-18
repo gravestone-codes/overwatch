@@ -1,0 +1,175 @@
+---
+import Site from "@/layouts/Site.astro";
+import PageHead from "@/components/site/PageHead.astro";
+import { industries } from "@/data/industries";
+import { contactHref } from "@/data/site";
+
+const questions = [
+  { q: "Do you back up every important server and database automatically, at least once a day?", tip: "Manual or partial backups are the most common reason data is lost for good." },
+  { q: "Is at least one copy of your backups out of reach of your network, so ransomware can't delete it?", tip: "Attackers go for backups first. A copy they can't reach is what makes recovery possible." },
+  { q: "Have you restored a whole server from backup in the last three months?", tip: "Untested backups fail when you need them most. Recovery should be rehearsed, ideally automatically." },
+  { q: "Do you know how long it would take to bring your main system back after a failure?", tip: "Without a measured recovery time, you can't plan for a bad day or answer your board or regulator." },
+  { q: "Would you be alerted if your backups stopped working tonight?", tip: "Silent failures are how organisations discover, months later, that they have nothing to restore." },
+  { q: "Does deleting backups require approval from more than one person?", tip: "A single stolen or misused account should never be enough to destroy every copy of your data." },
+  { q: "Are your backups scanned for malware before you restore them?", tip: "Restoring an infected backup brings the attack straight back into your network." },
+  { q: "Are your backups encrypted, with keys only your organisation controls?", tip: "Unencrypted backups are a second copy of your most sensitive data, waiting to be stolen." },
+];
+const answers = [
+  { v: 2, label: "Yes" },
+  { v: 1, label: "Partly" },
+  { v: 0, label: "No or not sure" },
+];
+---
+
+<Site title="Ransomware readiness check" description="Eight questions, two minutes. Find out how well your organisation would recover from ransomware or a failed server, and what to fix first.">
+  <PageHead title="Could you recover from ransomware tomorrow?" lede="Eight questions, two minutes. You get a score and the first three things to fix." />
+
+  <section class="section tight">
+    <div class="wrap" style="max-width: 52rem">
+      <form id="quiz" class="quiz" novalidate>
+        {
+          questions.map((item, i) => (
+            <fieldset class="q">
+              <legend><span aria-hidden="true">{i + 1}</span><span>{item.q}</span></legend>
+              <div class="answers scale">
+                {answers.map((a) => (
+                  <label><input type="radio" name={`q${i}`} value={a.v} /><span>{a.label}</span></label>
+                ))}
+              </div>
+            </fieldset>
+          ))
+        }
+        <p class="form-error" id="quiz-error" role="alert" hidden>Answer every question to see your score.</p>
+        <button type="submit" class="btn btn-solid" style="width: 100%; padding-block: 1.0625rem; margin-top: .5rem">See my score</button>
+      </form>
+
+      <div id="result" hidden tabindex="-1">
+        <div class="result">
+          <p class="label">Your readiness score</p>
+          <p class="score"><strong id="score">0</strong><span>/ 100</span></p>
+          <p class="verdict" id="verdict"></p>
+          <p id="verdict-body"></p>
+          <ol class="fixes" id="tips"></ol>
+          <div class="actions">
+            <a class="btn btn-light" href={contactHref("demo")}>Book a demo</a>
+            <button class="btn btn-line" type="button" id="retake">Answer again</button>
+          </div>
+        </div>
+
+        <div class="form-card" style="margin-top: 1rem">
+          <h2 class="h3">Get a free recovery review</h2>
+          <p class="muted" style="margin-top: .5rem">An engineer will go through your answers with you and show how to close each gap, whether or not you choose OmniArk.</p>
+          <form id="review" class="form-grid" novalidate>
+            <input type="text" name="company_website" hidden tabindex="-1" autocomplete="off" />
+            <label class="field-label">Your name<input class="field" name="name" autocomplete="name" /></label>
+            <label class="field-label">Work email<input class="field" name="email" type="email" autocomplete="email" /></label>
+            <label class="field-label">Organisation<input class="field" name="organisation" autocomplete="organization" /></label>
+            <label class="field-label">Industry
+              <select class="field" name="industry">
+                <option value="">Choose one</option>
+                {industries.map((i) => <option value={i.short}>{i.name}</option>)}
+                <option value="Other">Other</option>
+              </select>
+            </label>
+            <p class="form-error full" id="review-error" role="alert" hidden></p>
+            <div class="full"><button type="submit" class="btn btn-solid"><span id="review-label">Request my free review</span></button></div>
+          </form>
+          <p class="done" id="review-ok" hidden tabindex="-1">Thank you. An engineer will contact you, usually within one working day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline type="application/json" id="tips-data" set:html={JSON.stringify(questions.map((q) => q.tip))} />
+</Site>
+
+<script>
+  import { track } from "@vercel/analytics";
+
+  const tips: string[] = JSON.parse(document.getElementById("tips-data")!.textContent!);
+  const quiz = document.getElementById("quiz") as HTMLFormElement;
+  const result = document.getElementById("result")!;
+  let score = 0;
+
+  quiz.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const values = tips.map((_, i) => {
+      const checked = quiz.querySelector<HTMLInputElement>(`input[name=q${i}]:checked`);
+      return checked ? Number(checked.value) : null;
+    });
+    if (values.some((v) => v === null)) {
+      document.getElementById("quiz-error")!.hidden = false;
+      quiz.querySelector<HTMLInputElement>(`input[name=q${values.findIndex((v) => v === null)}]`)?.focus();
+      return;
+    }
+    const v = values as number[];
+    score = Math.round((v.reduce((a, b) => a + b, 0) / (v.length * 2)) * 100);
+    document.getElementById("score")!.textContent = String(score);
+    const [verdict, body] =
+      score >= 80
+        ? ["Well prepared", "You've covered the essentials. The next step is proving it: measured recovery times and tests that run on their own."]
+        : score >= 50
+          ? ["Partly protected", "Some gaps could turn a bad day into a lost week. Most of them are quick to close."]
+          : ["At serious risk", "Today, ransomware or a failed server could cost you data you can't get back. Every gap below can be fixed."];
+    document.getElementById("verdict")!.textContent = verdict;
+    document.getElementById("verdict-body")!.textContent = body;
+    const list = document.getElementById("tips")!;
+    const worst = v.map((val, i) => ({ val, tip: tips[i] })).filter((x) => x.val < 2).sort((a, b) => a.val - b.val).slice(0, 3);
+    list.replaceChildren(
+      ...(worst.length ? worst.map((x) => x.tip) : ["Nothing urgent. Keep testing your recoveries regularly."]).map((t) => {
+        const li = document.createElement("li");
+        li.textContent = t;
+        return li;
+      }),
+    );
+    document.getElementById("quiz-error")!.hidden = true;
+    quiz.hidden = true;
+    result.hidden = false;
+    result.focus();
+    result.scrollIntoView({ block: "start" });
+    track("readiness_completed", { score });
+  });
+
+  document.getElementById("retake")!.addEventListener("click", () => {
+    result.hidden = true;
+    quiz.hidden = false;
+    quiz.scrollIntoView({ block: "start" });
+  });
+
+  const review = document.getElementById("review") as HTMLFormElement;
+  const err = document.getElementById("review-error")!;
+  review.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    err.hidden = true;
+    const data = Object.fromEntries(new FormData(review)) as Record<string, string>;
+    Object.assign(data, { intent: "readiness", score: String(score), page: "/readiness" });
+    const fail = (msg: string, name?: string) => {
+      err.textContent = msg;
+      err.hidden = false;
+      if (name) (review.elements.namedItem(name) as HTMLElement)?.focus();
+    };
+    if ((data.name ?? "").trim().length < 2) return fail("Enter your name.", "name");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((data.email ?? "").trim())) return fail("That email address doesn't look right. Check it and try again.", "email");
+    if ((data.organisation ?? "").trim().length < 2) return fail("Enter your organisation's name.", "organisation");
+    const btn = review.querySelector("button")!;
+    const label = document.getElementById("review-label")!;
+    btn.disabled = true;
+    label.textContent = "Sending…";
+    try {
+      const res = await fetch("/api/lead", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || !json.ok) throw json;
+      track("lead_submitted", { intent: "readiness" });
+      review.hidden = true;
+      const ok = document.getElementById("review-ok")!;
+      ok.hidden = false;
+      ok.focus();
+    } catch (x) {
+      const r = x as { error?: string; field?: string };
+      fail(r?.error ?? "Your request wasn't sent. Check your connection and try again.", r?.field);
+    } finally {
+      btn.disabled = false;
+      label.textContent = "Request my free review";
+    }
+  });
+</script>

@@ -1,0 +1,84 @@
+---
+import Site from "@/layouts/Site.astro";
+import PageHead from "@/components/site/PageHead.astro";
+import Sectors from "@/components/site/Sectors.astro";
+import Routes from "@/components/site/Routes.astro";
+import { industries, type Industry } from "@/data/industries";
+import { site, contactHref } from "@/data/site";
+
+export function getStaticPaths() {
+  return industries.map((industry) => ({ params: { slug: industry.slug }, props: { industry } }));
+}
+
+const { industry } = Astro.props as { industry: Industry };
+
+// Story lines read "06:10 — what happened"; the time gets its own column. Lines without a time are numbered.
+const steps = (lines: string[]) =>
+  lines.map((line, i) => {
+    const m = line.match(/^(.{1,16}?) — (.+)$/);
+    return m ? { when: m[1], text: m[2] } : { when: `Step ${i + 1}`, text: line };
+  });
+const without = steps(industry.badDay.without);
+const withOa = steps(industry.badDay.with);
+---
+
+<Site title={industry.name} description={industry.lede}>
+  <PageHead title={industry.title} lede={industry.lede} crumbs={[{ label: "Industries", href: "/industries" }]} here={industry.name}>
+    <a class="btn btn-solid" href={contactHref("demo")}>Book a demo</a>
+    <a class="btn btn-line" href={contactHref("quote")}>Get a quote</a>
+  </PageHead>
+
+  <section class="section tight">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2">The same morning, two endings.</h2>
+      </div>
+      <div class="endings">
+        <div class="ending is-without">
+          <h3 class="h3">Without OmniArk</h3>
+          <ol>{without.map((s) => <li><time class="label">{s.when}</time><p>{s.text}</p></li>)}</ol>
+        </div>
+        <div class="ending is-with">
+          <h3 class="h3">With OmniArk</h3>
+          <ol>{withOa.map((s) => <li><time class="label">{s.when}</time><p>{s.text}</p></li>)}</ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2">What matters most to you, built in.</h2>
+      </div>
+      <div class="points" style="--cols: 3">
+        {
+          industry.needs.map((n) => (
+            <div>
+              <h3 class="h3">{n.title}</h3>
+              <p>{n.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="card" style="margin-top: clamp(2.5rem, 5vw, 4rem)">
+        <h3 class="h3">Systems we protect for {industry.short.toLowerCase()}</h3>
+        <ul class="protects" style="margin-top: 1rem">{industry.protects.map((p) => <li>{p}</li>)}</ul>
+        <p class="fine">
+          <a class="link" href={site.omniarkUrl} target="_blank" rel="noopener">Everything OmniArk protects, on the OmniArk site</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2">Other industries.</h2>
+      </div>
+      <Sectors exclude={industry.slug} />
+    </div>
+  </section>
+
+  <Routes />
+</Site>

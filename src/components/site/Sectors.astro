@@ -1,0 +1,32 @@
+---
+import { industries } from "@/data/industries";
+import { productByKey } from "@/data/company";
+
+interface Props {
+  exclude?: string;
+}
+const { exclude } = Astro.props;
+const rows = industries.filter((i) => i.slug !== exclude);
+---
+
+<div class="sectors">
+  <div class="sector-row is-head" aria-hidden="true">
+    <span class="label">Industry</span><span class="label">What matters there</span><span class="label">Products</span><span></span>
+  </div>
+  {
+    rows.map((i) => {
+      const next = productByKey(i.next);
+      return (
+        <a class="sector-row" href={`/industries/${i.slug}`}>
+          <h3>{i.row}</h3>
+          <p>{i.matters}</p>
+          <div class="chips">
+            <span class="chip label c-oa">OmniArk</span>
+            <span class={`chip label is-soon c-${next.key}`}>{next.name}, soon</span>
+          </div>
+          <svg class="go" width="18" height="18" aria-hidden="true"><use href="#arrow" /></svg>
+        </a>
+      );
+    })
+  }
+</div>

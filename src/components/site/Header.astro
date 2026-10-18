@@ -1,0 +1,127 @@
+---
+import { products, companyLinks } from "@/data/company";
+import { site, contactHref } from "@/data/site";
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const here = (href: string) => (path === href || path.startsWith(href + "/") ? "page" : undefined);
+const companyHere = companyLinks.some((l) => here(l.href)) ? "page" : undefined;
+const links = [
+  { label: "Services", href: "/services" },
+  { label: "Industries", href: "/industries" },
+  { label: "Pricing", href: "/pricing" },
+];
+const groups = [
+  { label: "Backup and recovery", items: products.filter((p) => p.category === "Backup and recovery") },
+  { label: "Network governance", items: products.filter((p) => p.category === "Network governance") },
+];
+const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopener" } : {});
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Overwatch Labs home">
+      <svg width="28" height="28" aria-hidden="true"><use href="#logo"></use></svg>
+      <span>Overwatch Labs</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <div class="has-menu">
+        <button class="nav-link" type="button" aria-haspopup="true">
+          Products <svg width="14" height="14" aria-hidden="true"><use href="#chev"></use></svg>
+        </button>
+        <div class="menu menu-products">
+          {
+            groups.map((g, i) => (
+              <div class="menu-group">
+                <span class="label">{g.label}</span>
+                {g.items.map((p) => (
+                  <a class="menu-item" href={p.href} {...ext(p.external)}>
+                    <span class={`mark c-${p.key}`}>{p.name.slice(0, 2)}</span>
+                    <span>
+                      <strong>
+                        {p.name}
+                        {p.external && <svg width="13" height="13" aria-hidden="true"><use href="#out"></use></svg>}
+                        {!p.available && <span class="label soon">In development</span>}
+                      </strong>
+                      <small>{p.short}</small>
+                    </span>
+                  </a>
+                ))}
+                {i === 1 && (
+                  <>
+                    <span class="label">Services</span>
+                    <a class="menu-item" href="/services">
+                      <span class="mark c-sv">Sv</span>
+                      <span>
+                        <strong>Services</strong>
+                        <small>Installation and managed operations</small>
+                      </span>
+                    </a>
+                  </>
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      {links.map((l) => <a class="nav-link" href={l.href} aria-current={here(l.href)}>{l.label}</a>)}
+      <div class="has-menu">
+        <button class="nav-link" type="button" aria-haspopup="true" aria-current={companyHere}>
+          Company <svg width="14" height="14" aria-hidden="true"><use href="#chev"></use></svg>
+        </button>
+        <div class="menu menu-company">
+          <div class="menu-group">
+            {
+              companyLinks.map((l) => (
+                <a class="menu-item" href={l.href} aria-current={here(l.href)}>
+                  <strong>{l.label}</strong>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="bar-end">
+      <button class="theme-btn" id="theme-toggle" type="button" aria-label="Switch between light and dark">
+        <svg class="i-moon" width="16" height="16" aria-hidden="true"><use href="#moon"></use></svg>
+        <svg class="i-sun" width="16" height="16" aria-hidden="true"><use href="#sun"></use></svg>
+      </button>
+      <a class="nav-link" href={site.portalUrl}>Sign in</a>
+      <a class="btn btn-solid btn-sm" href={contactHref("demo")}>Book a demo</a>
+      <button class="menu-btn" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Open menu"><i></i><i></i></button>
+    </div>
+  </div>
+
+  <div class="mnav" id="mnav" hidden>
+    <nav aria-label="Menu">
+      {
+        products.map((p) => (
+          <a href={p.href} {...ext(p.external)}>
+            <span class={`mark c-${p.key}`}>{p.name.slice(0, 2)}</span>
+            <span>
+              {p.name}
+              <small>{p.short}</small>
+              {!p.available && <small class="label menu-soon">In development</small>}
+            </span>
+          </a>
+        ))
+      }
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      {companyLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <div class="mnav-actions">
+      <a class="btn btn-solid" href={contactHref("demo")}>Book a demo</a>
+      <a class="btn btn-line" href={contactHref("quote")}>Get a quote</a>
+      <a class="mnav-signin" href={site.portalUrl}>Sign in</a>
+    </div>
+    <div class="mnav-theme">
+      <span id="appearance-label">Appearance</span>
+      <div class="seg" role="group" aria-labelledby="appearance-label">
+        <button type="button" data-set-theme="dark">Dark</button>
+        <button type="button" data-set-theme="light">Light</button>
+      </div>
+    </div>
+  </div>
+</header>
