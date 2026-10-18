@@ -15,14 +15,31 @@ const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const fullTitle = title.includes("Overwatch Labs") ? title : `${title} · Overwatch Labs`;
 const ogImage = new URL("/og.png", site.url).href;
-const org = {
+const home = new URL("/", site.url).href;
+const structured = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: site.name,
-  url: site.url,
-  email: site.email,
-  telephone: site.phone,
-  logo: new URL("/favicon.svg", site.url).href,
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${home}#organization`,
+      name: site.name,
+      url: home,
+      logo: { "@type": "ImageObject", url: new URL("/logo.png", site.url).href, width: 512, height: 512 },
+      description: "Overwatch Labs designs, builds and runs software products. Its first product, OmniArk, is backup and recovery software.",
+      foundingDate: site.founded,
+      email: site.email,
+      telephone: site.phone,
+      // The company's official profiles, so search engines connect them to this site.
+      sameAs: [site.linkedin, site.x],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${home}#website`,
+      name: site.name,
+      url: home,
+      publisher: { "@id": `${home}#organization` },
+    },
+  ],
 };
 ---
 
@@ -46,7 +63,7 @@ const org = {
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json" set:html={JSON.stringify(org)} />
+    <script type="application/ld+json" set:html={JSON.stringify(structured)} />
     <script is:inline>
       try {
         const t = localStorage.getItem("ow-theme");

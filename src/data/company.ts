@@ -89,6 +89,8 @@ export const footer = [
       { label: "Contact", href: "/contact" },
       { label: "Readiness check", href: "/readiness" },
       { label: "Privacy", href: "/privacy" },
+      { label: "LinkedIn", href: site.linkedin, external: true },
+      { label: "X (Twitter)", href: site.x, external: true },
     ],
   },
 ];
