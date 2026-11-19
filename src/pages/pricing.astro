@@ -2,7 +2,7 @@
 import Site from "@/layouts/Site.astro";
 import PageHead from "@/components/site/PageHead.astro";
 import Routes from "@/components/site/Routes.astro";
-import { services, products } from "@/data/company";
+import { services, products, offsite } from "@/data/company";
 import { site, contactHref } from "@/data/site";
 
 const included = [
@@ -88,6 +88,11 @@ const faq = [
             </div>
           ))
         }
+        <div class="row">
+          <h3 class="h3"><span class="mark c-oa">Om</span>{offsite.full}</h3>
+          <p>{offsite.line} An add-on to your licence, in development.</p>
+          <a class="price" href={offsite.href}>Get notified</a>
+        </div>
         {
           later.map((p) => (
             <div class="row">

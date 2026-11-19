@@ -2,7 +2,7 @@
   Overwatch Labs company site.
 
   Colour: sage paper and spruce ink by day, deep spruce by night. Each product owns one colour:
-  OmniArk bronze, Ark Cloud blue, OWL green. Product colours appear only where a product is meant.
+  OmniArk bronze, Ark Cloud blue, Pillar gold, OWL green. Product colours appear only where a product is meant.
   Type: Schibsted Grotesk for headlines, Instrument Sans for reading, Martian Mono only for data labels.
   Layout: left-aligned. Pages open with the split head (headline left, lede and actions bottom-right);
   the product bands are the one loud element.
@@ -31,6 +31,7 @@
   --on-c: #0f1f1b;
   --oa: #dea47e;
   --ac: #9ebbda;
+  --pl: #e3c46f;
   --ow: #a7c78f;
   --bad: #b2402f;
   --logo-bg: #15212b;
@@ -136,6 +137,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .c-oa { --c: var(--oa); }
 .c-ac { --c: var(--ac); }
+.c-pl { --c: var(--pl); }
 .c-ow { --c: var(--ow); }
 .c-sv { --c: var(--solid); }
 
@@ -272,8 +274,13 @@ html:has(.mnav:not([hidden])) .site-header { background: var(--bg); }
 .art i:nth-child(4n) { --k: 0.6s; }
 .art-bays { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
 .art-bays i::after { left: 50%; bottom: 5px; margin-left: -2px; }
-.art-off { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; padding: 5px; border: 1.5px dashed color-mix(in srgb, var(--on-c) 50%, transparent); border-radius: 4px; }
-.art-off i::after { left: 50%; bottom: 4px; margin-left: -2px; }
+/* Ark Cloud: a wall of running apps, each a window with its light in the corner. */
+.art-apps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: 1fr 1fr; gap: 4px; }
+.art-apps i::after { top: 4px; left: 4px; }
+/* Pillar: a restaurant floor seen from above, round tables in two rows. */
+.art-tables { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: 1fr 1fr; gap: 6px 4px; }
+.art-tables i { justify-self: center; height: 100%; aspect-ratio: 1; border-radius: 50%; }
+.art-tables i::after { left: 50%; top: 50%; margin: -2px 0 0 -2px; }
 .art-ports { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); grid-template-rows: 1fr 1fr; gap: 5px 4px; padding-block: 0.25rem; }
 .art-ports i { background: color-mix(in srgb, var(--on-c) 30%, transparent); }
 .art-ports i::after { top: 2px; left: 2px; width: 3px; height: 3px; background: var(--face); opacity: 1; }

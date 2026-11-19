@@ -1,6 +1,6 @@
 ---
 import { industries } from "@/data/industries";
-import { productByKey } from "@/data/company";
+import { productByKey, offsite } from "@/data/company";
 
 interface Props {
   exclude?: string;
@@ -15,7 +15,7 @@ const rows = industries.filter((i) => i.slug !== exclude);
   </div>
   {
     rows.map((i) => {
-      const next = productByKey(i.next);
+      const next = i.next === "offsite" ? { key: "oa", name: offsite.name } : productByKey(i.next);
       return (
         <a class="sector-row" href={`/industries/${i.slug}`}>
           <h3>{i.row}</h3>

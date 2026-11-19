@@ -1,5 +1,5 @@
 ---
-import { products, companyLinks } from "@/data/company";
+import { products, companyLinks, offsite } from "@/data/company";
 import { site, contactHref } from "@/data/site";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -10,10 +10,9 @@ const links = [
   { label: "Industries", href: "/industries" },
   { label: "Pricing", href: "/pricing" },
 ];
-const groups = [
-  { label: "Backup and recovery", items: products.filter((p) => p.category === "Backup and recovery") },
-  { label: "Network governance", items: products.filter((p) => p.category === "Network governance") },
-];
+const inCategory = (category: string) => ({ label: category, items: products.filter((p) => p.category === category) });
+// Two columns in the products menu; Services closes the last one.
+const columns = [[inCategory("Backup and recovery"), inCategory("Cloud platform")], [inCategory("Hospitality"), inCategory("Network governance")]];
 const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopener" } : {});
 ---
 
@@ -31,23 +30,39 @@ const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopene
         </button>
         <div class="menu menu-products">
           {
-            groups.map((g, i) => (
+            columns.map((groups, i) => (
               <div class="menu-group">
-                <span class="label">{g.label}</span>
-                {g.items.map((p) => (
-                  <a class="menu-item" href={p.href} {...ext(p.external)}>
-                    <span class={`mark c-${p.key}`}>{p.name.slice(0, 2)}</span>
-                    <span>
-                      <strong>
-                        {p.name}
-                        {p.external && <svg width="13" height="13" aria-hidden="true"><use href="#out"></use></svg>}
-                        {!p.available && <span class="label soon">In development</span>}
-                      </strong>
-                      <small>{p.short}</small>
-                    </span>
-                  </a>
+                {groups.map((g) => (
+                  <>
+                    <span class="label">{g.label}</span>
+                    {g.items.map((p) => (
+                      <>
+                        <a class="menu-item" href={p.href} {...ext(p.external)}>
+                          <span class={`mark c-${p.key}`}>{p.name.slice(0, 2)}</span>
+                          <span>
+                            <strong>
+                              {p.name}
+                              {p.external && <svg width="13" height="13" aria-hidden="true"><use href="#out"></use></svg>}
+                              {!p.available && <span class="label soon">In development</span>}
+                            </strong>
+                            <small>{p.short}</small>
+                          </span>
+                        </a>
+                        {/* OmniArk's off-site copy is an add-on, listed right under it. */}
+                        {p.key === "oa" && (
+                          <a class="menu-item" href={offsite.href}>
+                            <span class="mark c-oa">+</span>
+                            <span>
+                              <strong>{offsite.name}</strong>
+                              <small>An OmniArk add-on, in development</small>
+                            </span>
+                          </a>
+                        )}
+                      </>
+                    ))}
+                  </>
                 ))}
-                {i === 1 && (
+                {i === columns.length - 1 && (
                   <>
                     <span class="label">Services</span>
                     <a class="menu-item" href="/services">

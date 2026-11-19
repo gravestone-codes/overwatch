@@ -6,8 +6,8 @@ export type Industry = {
   short: string;
   /** One line for the industries table: what matters most there. */
   matters: string;
-  /** Besides OmniArk, the product in development that this sector will use. */
-  next: "ac" | "ow";
+  /** Besides OmniArk, what's in development that this sector will use: OmniArk's off-site copy, or OWL. */
+  next: "offsite" | "ow";
   icon: "Hospital" | "Landmark" | "Building" | "GraduationCap" | "Store";
   title: string;
   lede: string;
@@ -23,7 +23,7 @@ export const industries: Industry[] = [
     name: "Hospitals and clinics",
     row: "Hospitals and clinics",
     matters: "Patient records and imaging, safe from ransomware and failing servers.",
-    next: "ac",
+    next: "offsite",
     short: "Healthcare",
     icon: "Hospital",
     title: "Patient records that survive anything.",
@@ -140,7 +140,7 @@ export const industries: Industry[] = [
     name: "Schools and universities",
     row: "Schools and universities",
     matters: "Student records and finances, safe through exams and admissions.",
-    next: "ac",
+    next: "offsite",
     short: "Education",
     icon: "GraduationCap",
     title: "Years of student records, never lost.",
@@ -179,7 +179,7 @@ export const industries: Industry[] = [
     name: "Businesses",
     row: "Businesses of every size",
     matters: "Files, finance systems and email that come back without stopping the work.",
-    next: "ac",
+    next: "offsite",
     short: "Business",
     icon: "Store",
     title: "Your business keeps running.",

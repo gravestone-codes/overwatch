@@ -13,6 +13,10 @@ export const site = {
   signInUrl: "/sign-in",
   // OmniArk has its own site; every "OmniArk" link on this one points there.
   omniarkUrl: "https://omniark.app",
+  // Ark Cloud is self-serve: people sign up and pay on its own site.
+  arkcloudUrl: "https://arkcloud.online",
+  // Pillar has its own site too (pillar-website). The address is a placeholder until it is confirmed.
+  pillarUrl: "https://pillar.overwatchlabs.dev",
 };
 
 export type Intent = "demo" | "trial" | "quote" | "cloud" | "owl" | "services" | "general";
@@ -37,9 +41,9 @@ export const intents: Record<Intent, { label: string; title: string; lede: strin
     submit: "Get my quote",
   },
   cloud: {
-    label: "Hear when Ark Cloud opens",
-    title: "Hear first when Ark Cloud opens",
-    lede: "Ark Cloud, a protected off-site copy of your backups in our data centre, is in development. Leave your details and we'll tell you when it opens.",
+    label: "Hear when the off-site copy opens",
+    title: "Hear first when OmniArk's off-site copy opens",
+    lede: "An off-site copy for OmniArk, protecting your backups in our data centre, is in development. Leave your details and we'll tell you when it opens.",
     submit: "Notify me",
   },
   owl: {

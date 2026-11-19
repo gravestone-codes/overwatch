@@ -1,7 +1,7 @@
 # Overwatch Labs — company site
 
 The company site at https://www.overwatchlabs.dev, built with Astro and deployed on Vercel.
-Each product has its own site (OmniArk: https://omniark.app); this one introduces the company and its products.
+Each product has its own site (OmniArk: https://omniark.app, Ark Cloud: https://arkcloud.online, Pillar: `site.pillarUrl` in `src/data/site.ts`, address to be confirmed); this one introduces the company and its products.
 
 ## Structure
 

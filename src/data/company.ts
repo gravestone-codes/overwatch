@@ -2,8 +2,8 @@ import { site, contactHref } from "./site";
 import { industries } from "./industries";
 
 // Everything the company site says about its products. Each product has its own site;
-// this one only introduces them. OmniArk is available; the others are in development.
-export type ProductKey = "oa" | "ac" | "ow";
+// this one only introduces them.
+export type ProductKey = "oa" | "ac" | "pl" | "ow";
 
 export const products: {
   key: ProductKey;
@@ -16,14 +16,14 @@ export const products: {
   short: string;
   href: string;
   external: boolean;
-  art: "bays" | "off" | "ports";
+  art: "bays" | "apps" | "tables" | "ports";
 }[] = [
   {
     key: "oa",
     name: "OmniArk",
     category: "Backup and recovery",
     available: true,
-    line: "Immutable backups and fast recovery, on your own premises.",
+    line: "Immutable backups and fast recovery on your own premises. An off-site copy in our data centre is coming.",
     short: "Backup and recovery on your premises",
     href: site.omniarkUrl,
     external: true,
@@ -32,13 +32,24 @@ export const products: {
   {
     key: "ac",
     name: "Ark Cloud",
-    category: "Backup and recovery",
-    available: false,
-    line: "A protected off-site copy of your backups, run by us.",
-    short: "An off-site copy in our data centre",
-    href: contactHref("cloud"),
-    external: false,
-    art: "off",
+    category: "Cloud platform",
+    available: true,
+    line: "Connect a repository and Ark Cloud builds it, runs it and gives you a link.",
+    short: "Put your code online from a repository",
+    href: site.arkcloudUrl,
+    external: true,
+    art: "apps",
+  },
+  {
+    key: "pl",
+    name: "Pillar",
+    category: "Hospitality",
+    available: true,
+    line: "Rooms, restaurant, bar and events on one system. We host it; your staff open a link.",
+    short: "Hotel and restaurant management, hosted by us",
+    href: site.pillarUrl,
+    external: true,
+    art: "tables",
   },
   {
     key: "ow",
@@ -54,6 +65,15 @@ export const products: {
 ];
 
 export const productByKey = (key: ProductKey) => products.find((p) => p.key === key)!;
+
+// An add-on to OmniArk, not a product of its own: it copies OmniArk's backups to our data centre.
+// It wears OmniArk's colour wherever it appears.
+export const offsite = {
+  name: "Off-site copy",
+  full: "OmniArk off-site copy",
+  line: "A protected copy of your OmniArk backups in our data centre, run by us.",
+  href: contactHref("cloud"),
+};
 
 export const companyLinks = [
   { label: "About us", href: "/about" },
