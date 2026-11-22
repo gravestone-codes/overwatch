@@ -1,17 +1,16 @@
 ---
 import Site from "@/layouts/Site.astro";
 import { intents, site, type Intent } from "@/data/site";
-import { industries } from "@/data/industries";
+import { industries, moreSectors } from "@/data/industries";
 
-// The first five are always offered; the in-development products and services appear when a link asks for them.
+// The off-site copy appears only when a link asks for it.
 const options: { intent: Intent; hint: string; extra?: boolean }[] = [
-  { intent: "demo", hint: "A 30-minute walkthrough on your systems" },
-  { intent: "trial", hint: `OmniArk free for ${site.trialDays} days` },
-  { intent: "quote", hint: "A clear price within a working day" },
-  { intent: "services", hint: "Installation or managed operations" },
-  { intent: "general", hint: "Anything else" },
-  { intent: "cloud", hint: "An OmniArk add-on, in development", extra: true },
-  { intent: "owl", hint: "OWL is in development", extra: true },
+  { intent: "general", hint: "Questions about any of our products" },
+  { intent: "ark", hint: "Classrooms, teams and organisations" },
+  { intent: "omniark", hint: "Backup and recovery on your premises" },
+  { intent: "pillar", hint: "Hotel and restaurant management" },
+  { intent: "owl", hint: "Network backup and compliance" },
+  { intent: "cloud", hint: "An OmniArk add-on", extra: true },
 ];
 // Sizes are a scale, so they read left to right with a stack of rack units that grows; "Not sure" sits apart.
 const sizes = [
@@ -22,17 +21,19 @@ const sizes = [
   { value: "More than 200", label: "200+" },
 ];
 const steps = ["What you need", "Your organisation", "Your details"];
-const d = intents.demo;
+const d = intents.general;
+// The "Systems to protect" question sizes an OmniArk quote; other requests skip it.
+const omniarkIntents: Intent[] = ["omniark", "cloud"];
 ---
 
-<Site title="Contact" description="Book a demo, start a free trial, get a quote or ask a question. A person at Overwatch Labs replies within one working day.">
+<Site title="Contact" description="Questions about Ark Cloud, OmniArk, Pillar or OWL. A person at Overwatch Labs replies within one working day.">
   <section class="page-head">
     <div class="wrap contact-grid">
       <div>
         <h1 id="intent-title" style="font-size: clamp(2.5rem, 5.2vw, 4.25rem)">{d.title}</h1>
         <p id="intent-lede" class="lede" style="margin-top: 1.5rem">{d.lede}</p>
         <ol class="steps-next">
-          <li><div><strong>You tell us what you run</strong><span>Three short steps, about a minute.</span></div></li>
+          <li><div><strong>You tell us what you need</strong><span>Three short steps, about a minute.</span></div></li>
           <li><div><strong>An engineer gets back to you</strong><span>Usually within one working day.</span></div></li>
           <li><div><strong>We meet on your terms</strong><span>On a call, or at your premises.</span></div></li>
         </ol>
@@ -62,7 +63,7 @@ const d = intents.demo;
               {
                 options.map((o) => (
                   <label class="opt" data-option={o.intent} hidden={o.extra}>
-                    <input type="radio" name="intent" value={o.intent} checked={o.intent === "demo"} />
+                    <input type="radio" name="intent" value={o.intent} checked={o.intent === "general"} />
                     <span>
                       <strong>{intents[o.intent].label}</strong>
                       <small>{o.hint}</small>
@@ -84,13 +85,13 @@ const d = intents.demo;
               <p class="field-label" id="industry-label">Industry</p>
               <div class="choices" role="radiogroup" aria-labelledby="industry-label">
                 {
-                  [...industries.map((i) => ({ value: i.short, label: i.name })), { value: "Other", label: "Something else" }].map((o) => (
+                  [...industries.map((i) => ({ value: i.short, label: i.name })), ...moreSectors.map((m) => ({ value: m.short, label: m.name })), { value: "Other", label: "Something else" }].map((o) => (
                     <label class="choice"><input type="radio" name="industry" value={o.value} /><span>{o.label}</span></label>
                   ))
                 }
               </div>
             </div>
-            <div style="margin-top: 1.5rem">
+            <div style="margin-top: 1.5rem" id="systems-block" data-intents={omniarkIntents.join(" ")}>
               <p class="field-label" id="systems-label">Systems to protect</p>
               <div class="scale" role="radiogroup" aria-labelledby="systems-label">
                 {
@@ -157,7 +158,10 @@ const d = intents.demo;
   const submitLabel = document.getElementById("submit-label")!;
   let current = 0;
 
+  // Older links asked for a demo, trial, quote or services; OmniArk takes sign-ups on its waiting list now.
+  const legacy: Record<string, string> = { demo: "omniark", trial: "omniark", quote: "omniark", services: "omniark" };
   function setIntent(intent: string) {
+    intent = legacy[intent] ?? intent;
     const key = copy[intent] ? intent : "general";
     const radio = form.querySelector<HTMLInputElement>(`input[name="intent"][value="${key}"]`);
     if (radio) {
@@ -167,6 +171,8 @@ const d = intents.demo;
     document.getElementById("intent-title")!.textContent = copy[key].title;
     document.getElementById("intent-lede")!.textContent = copy[key].lede;
     submitLabel.textContent = copy[key].submit;
+    const systems = document.getElementById("systems-block")!;
+    systems.hidden = !systems.dataset.intents!.split(" ").includes(key);
   }
 
   function clearError() {
@@ -206,13 +212,13 @@ const d = intents.demo;
   // Links like /contact?intent=quote&systems=6–20 arrive pre-filled, and skip the question they already answer.
   const params = new URLSearchParams(location.search);
   const preset = params.get("intent");
-  setIntent(preset ?? "demo");
+  setIntent(preset ?? "general");
   const sys = params.get("systems");
   if (sys) {
     const r = form.querySelector<HTMLInputElement>(`input[name="systems"][value="${CSS.escape(sys)}"]`);
     if (r) r.checked = true;
   }
-  if (preset && copy[preset]) go(1, false);
+  if (preset && copy[legacy[preset] ?? preset]) go(1, false);
 
   form.querySelectorAll<HTMLInputElement>('input[name="intent"]').forEach((r) =>
     r.addEventListener("change", () => {

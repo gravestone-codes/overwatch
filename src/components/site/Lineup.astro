@@ -1,5 +1,5 @@
 ---
-import { products } from "@/data/company";
+import { products, statusLabel } from "@/data/company";
 
 // The product bands: each product in its own colour, the one loud element on the site.
 const art = { bays: 6, apps: 8, tables: 10, ports: 16 } as const;
@@ -8,7 +8,7 @@ const art = { bays: 6, apps: 8, tables: 10, ports: 16 } as const;
 <div class="lineup" id="products">
   <div class="lineup-head">
     <span class="label">Products</span>
-    <span class="label">{products.filter((p) => p.available).length} available, {products.filter((p) => !p.available).length} in development</span>
+    <span class="label">{products.filter((p) => p.available).length} available, {products.filter((p) => !p.available).length} on the waiting list</span>
   </div>
   {
     products.map((p) => (
@@ -17,10 +17,10 @@ const art = { bays: 6, apps: 8, tables: 10, ports: 16 } as const;
         <span class="line-copy">
           <span class="line-meta">
             <span class="label">{p.category}</span>
-            <span class:list={["label status", !p.available && "is-soon"]}>{p.available ? "Available" : "In development"}</span>
+            <span class:list={["label status", !p.available && "is-soon"]}>{statusLabel(p.available)}</span>
           </span>
           <p>{p.line}</p>
-          {!p.available && <span class="sr-only">Get notified when {p.name} opens</span>}
+          {!p.available && <span class="sr-only">, on the waiting list</span>}
         </span>
         <span class={`art art-${p.art}`} aria-hidden="true">
           {Array.from({ length: art[p.art] }, () => <i />)}

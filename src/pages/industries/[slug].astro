@@ -4,6 +4,7 @@ import PageHead from "@/components/site/PageHead.astro";
 import Sectors from "@/components/site/Sectors.astro";
 import Routes from "@/components/site/Routes.astro";
 import { industries, type Industry } from "@/data/industries";
+import { offerItems, waitlistHref } from "@/data/company";
 import { site, contactHref } from "@/data/site";
 
 export function getStaticPaths() {
@@ -11,6 +12,9 @@ export function getStaticPaths() {
 }
 
 const { industry } = Astro.props as { industry: Industry };
+const offer = offerItems(industry.offer);
+// The hero leads with a product this sector can start on today, if there is one.
+const open = offer.find((o) => o.available);
 
 // Story lines read "06:10 — what happened"; the time gets its own column. Lines without a time are numbered.
 const steps = (lines: string[]) =>
@@ -20,18 +24,50 @@ const steps = (lines: string[]) =>
   });
 const without = steps(industry.badDay.without);
 const withOa = steps(industry.badDay.with);
+const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopener" } : {});
 ---
 
 <Site title={industry.name} description={industry.lede}>
   <PageHead title={industry.title} lede={industry.lede} crumbs={[{ label: "Industries", href: "/industries" }]} here={industry.name}>
-    <a class="btn btn-solid" href={contactHref("demo")}>Book a demo</a>
-    <a class="btn btn-line" href={contactHref("quote")}>Get a quote</a>
+    {
+      open ? (
+        <>
+          <a class="btn btn-solid" href={open.href} {...ext(open.external)}>Start on {open.name}</a>
+          <a class="btn btn-line" href={waitlistHref("oa")}>Join the OmniArk waiting list</a>
+        </>
+      ) : (
+        <>
+          <a class="btn btn-solid" href={waitlistHref("oa")}>Join the OmniArk waiting list</a>
+          <a class="btn btn-line" href={contactHref("general")}>Ask a question</a>
+        </>
+      )
+    }
   </PageHead>
 
   <section class="section tight">
     <div class="wrap">
       <div class="section-head">
+        <h2 class="h2">Our products for {industry.short.toLowerCase()}.</h2>
+      </div>
+      <div class="rows">
+        {
+          offer.map((o) => (
+            <div class="row">
+              <h3 class="h3"><span class={`mark c-${o.colour}`}>{o.key === "offsite" ? "+" : o.name.slice(0, 2)}</span>{o.name}</h3>
+              <p>{o.line}</p>
+              <a class="price" href={o.href} {...ext(o.external)}>{o.available ? `Visit ${o.name}` : "Join the waiting list"}</a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
         <h2 class="h2">The same morning, two endings.</h2>
+        <p>What OmniArk will do on a bad day. It's on the waiting list today.</p>
       </div>
       <div class="endings">
         <div class="ending is-without">
@@ -49,7 +85,7 @@ const withOa = steps(industry.badDay.with);
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <h2 class="h2">What matters most to you, built in.</h2>
+        <h2 class="h2">What matters most to you, built into OmniArk.</h2>
       </div>
       <div class="points" style="--cols: 3">
         {
@@ -62,7 +98,7 @@ const withOa = steps(industry.badDay.with);
         }
       </div>
       <div class="card" style="margin-top: clamp(2.5rem, 5vw, 4rem)">
-        <h3 class="h3">Systems we protect for {industry.short.toLowerCase()}</h3>
+        <h3 class="h3">Systems OmniArk protects for {industry.short.toLowerCase()}</h3>
         <ul class="protects" style="margin-top: 1rem">{industry.protects.map((p) => <li>{p}</li>)}</ul>
         <p class="fine">
           <a class="link" href={site.omniarkUrl} target="_blank" rel="noopener">Everything OmniArk protects, on the OmniArk site</a>

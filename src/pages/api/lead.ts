@@ -3,7 +3,7 @@ import type { APIRoute } from "astro";
 export const prerender = false;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const INTENTS = new Set(["demo", "trial", "quote", "cloud", "owl", "services", "general", "readiness"]);
+const INTENTS = new Set(["omniark", "pillar", "owl", "cloud", "ark", "general", "readiness", "demo", "trial", "quote", "services"]);
 
 const clean = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max);
 

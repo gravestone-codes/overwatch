@@ -4,18 +4,22 @@ import Lineup from "@/components/site/Lineup.astro";
 import ServicesBand from "@/components/site/ServicesBand.astro";
 import Sectors from "@/components/site/Sectors.astro";
 import Routes from "@/components/site/Routes.astro";
+import { site } from "@/data/site";
 ---
 
 <Site
   title="Overwatch Labs · We design, build and run software products"
-  description="Overwatch Labs designs, builds and runs software products. OmniArk, for backup and recovery, Ark Cloud, for putting code online, and Pillar, for running hotels and restaurants, are available today; OWL is in development."
+  description="Overwatch Labs designs, builds and runs software products. Ark Cloud, for putting code online, is available today. OmniArk, for backup and recovery, Pillar, for hotels and restaurants, and OWL, for network compliance, have waiting lists."
 >
   <section class="hero">
     <div class="wrap">
       <div class="split">
-        <h1>We design, build and run software products.</h1>
         <div>
-          <p class="lede">Overwatch Labs’ first product, OmniArk, protects backups and recovery today, with more in development. Our engineers stay with every customer after the sale.</p>
+          <a class="news c-ac" href={site.arkcloudUrl}><span class="label">New</span>Ark Cloud is live<svg width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+          <h1>We design, build and run software products.</h1>
+        </div>
+        <div>
+          <p class="lede">Backup and recovery, a cloud platform for your code, hotel and restaurant software, and network compliance. Ark Cloud is live today: connect a repository and get a link.</p>
           <div class="actions">
             <a class="btn btn-solid" href="#products">See our products</a>
             <a class="btn btn-line" href="#contact">Talk to us</a>
@@ -32,7 +36,7 @@ import Routes from "@/components/site/Routes.astro";
     <div class="wrap">
       <div class="section-head">
         <h2 class="h2">Who our products are for.</h2>
-        <p>Organisations of every size, in every sector. Each industry page covers what matters most there.</p>
+        <p>What matters in each sector, and which of our products fit it.</p>
       </div>
       <Sectors />
     </div>

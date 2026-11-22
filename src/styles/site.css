@@ -375,7 +375,7 @@ a.sector-row:hover .go { color: var(--text); transform: translateX(3px); }
 .ledger div { display: flex; align-items: baseline; gap: 1rem; padding-block: 0.6875rem; }
 .ledger dt { flex: 1; display: flex; align-items: baseline; gap: 1rem; min-width: 0; }
 .ledger dt::after { content: ""; flex: 1; min-width: 1.5rem; border-bottom: 2px dotted var(--band-line); transform: translateY(-0.28em); }
-.ledger dd { flex: none; color: var(--oa); font-weight: 600; }
+.ledger dd { flex: none; color: var(--c, var(--oa)); font-weight: 600; }
 .licence .actions { margin-top: 2rem; }
 .estimator { display: flex; flex-direction: column; padding: 2rem; border-radius: 12px; background: var(--face); border: 1px solid var(--line); }
 .estimator > p { margin-top: 0.5rem; color: var(--muted); font-size: 0.9375rem; }
@@ -574,3 +574,11 @@ textarea.field { resize: vertical; min-height: 6rem; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
 }
+
+/* Launch announcement above the home hero: one product's colour, one line. */
+.news { display: inline-flex; align-items: center; gap: 0.625rem; margin-bottom: 1.5rem; padding: 0.375rem 0.75rem 0.375rem 0.375rem; border-radius: 999px; background: var(--panel); color: var(--text); font-size: 0.9375rem; font-weight: 500; transition: background 0.2s; }
+.news .label { padding: 0.1875rem 0.4375rem; border-radius: 999px; background: var(--c); color: var(--on-c); }
+.news svg { opacity: 0.6; }
+.news:hover { background: color-mix(in srgb, var(--c) 22%, var(--panel)); }
+.mode-products { margin-top: 0.75rem; }
+.mode-products[hidden] { display: none; }
