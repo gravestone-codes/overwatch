@@ -22,7 +22,7 @@ const year = new Date().getFullYear();
             {col.links.map((l) => (
               <a href={l.href} {...("external" in l && l.external ? { target: "_blank", rel: "noopener" } : {})}>
                 {l.label}
-                {"soon" in l && l.soon && <small class="soon-note">In development</small>}
+                {"soon" in l && l.soon && <small class="soon-note">Waiting list</small>}
               </a>
             ))}
           </nav>

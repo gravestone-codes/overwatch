@@ -1,5 +1,6 @@
 ---
 import { contactHref } from "@/data/site";
+import { productByKey, type ProductKey } from "@/data/company";
 
 interface Props {
   title?: string;
@@ -10,18 +11,18 @@ const { title = "Run it yourself, or let us run it for you.", lede } = Astro.pro
 // Who does what, for each way of working. `us` lists the modes in which we take the task.
 const tasks = [
   { task: "Installation and setup", us: ["install", "managed"] },
-  { task: "Daily monitoring", us: ["managed"] },
-  { task: "Tests and health checks", us: ["managed"] },
-  { task: "Acting on alerts", us: ["managed"] },
-  { task: "Monthly reports", us: ["managed"] },
+  { task: "Servers and updates", us: ["managed"] },
+  { task: "Monitoring and alerts", us: ["managed"] },
+  { task: "Backups", us: ["managed"] },
 ];
-const included = ["Support and on-site help", "Operator training"];
-const modes = [
-  { id: "self", label: "You run it", note: "Your team installs and runs it. We support and train you." },
-  { id: "install", label: "We install it", note: "Our technicians set it up on site, then your team takes over." },
-  { id: "managed", label: "We run it", note: "We operate it under your licence. You get the monthly report." },
+const included = ["Support from the engineers who build it"];
+// Which products work each way: Ark Cloud and Pillar always run on our servers; OmniArk works all three ways.
+const modes: { id: string; label: string; note: string; products: ProductKey[] }[] = [
+  { id: "self", label: "You run it", note: "It runs on your servers and your team operates it. We support and train you.", products: ["oa"] },
+  { id: "install", label: "We install it", note: "Our technicians set it up on site, then your team takes over.", products: ["oa"] },
+  { id: "managed", label: "We run it", note: "We keep it running and up to date. You just use it.", products: ["ac", "pl", "oa"] },
 ];
-const start = "install";
+const start = "managed";
 ---
 
 <section class="section band" id="ways">
@@ -40,7 +41,16 @@ const start = "install";
         }
       </div>
       <p class="mode-note" id="mode-note" aria-live="polite">{modes.find((m) => m.id === start)!.note}</p>
-      <a class="btn btn-light" href={contactHref("services")}>Talk to an engineer</a>
+      {
+        modes.map((m) => (
+          <div class="chips mode-products" data-mode={m.id} hidden={m.id !== start}>
+            {m.products.map((k) => (
+              <span class:list={["chip label", `c-${k}`, !productByKey(k).available && "is-soon"]}>{productByKey(k).name}{!productByKey(k).available && ", soon"}</span>
+            ))}
+          </div>
+        ))
+      }
+      <a class="btn btn-light" href={contactHref("general")}>Ask a question</a>
     </div>
 
     <div class="duty" id="duty">
@@ -53,7 +63,7 @@ const start = "install";
           </div>
         ))
       }
-      <div class="duty-group"><span class="label">Included with every licence</span></div>
+      <div class="duty-group"><span class="label">Included with every product</span></div>
       {
         included.map((t) => (
           <div class="duty-row is-us is-fixed" data-us="self install managed">
@@ -71,6 +81,7 @@ const start = "install";
   const rows = document.querySelectorAll<HTMLElement>("#duty .duty-row");
   const note = document.getElementById("mode-note")!;
   const count = document.getElementById("duty-count")!;
+  const chips = document.querySelectorAll<HTMLElement>(".mode-products");
   function setMode(input: HTMLInputElement) {
     let us = 0;
     rows.forEach((row, i) => {
@@ -80,6 +91,7 @@ const start = "install";
       if (on) us += 1;
     });
     note.textContent = input.dataset.note!;
+    chips.forEach((c) => (c.hidden = c.dataset.mode !== input.value));
     count.textContent = `You ${rows.length - us}, us ${us}`;
   }
   const inputs = document.querySelectorAll<HTMLInputElement>('input[name="mode"]');

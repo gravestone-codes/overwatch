@@ -7,10 +7,10 @@ interface Props {
 }
 const { title = "Tell us what you need.", lede = "A real person usually replies within one working day." } = Astro.props;
 const routes = [
-  { title: "Book a demo", body: "See OmniArk on your own systems.", href: contactHref("demo"), primary: true },
-  { title: "Start a free trial", body: `OmniArk, free for ${site.trialDays} days.`, href: contactHref("trial") },
-  { title: "Get a quote", body: "Licences and services for your setup.", href: contactHref("quote") },
-  { title: "Take the readiness check", body: "Eight questions about your backups.", href: "/readiness" },
+  { title: "Start on Ark Cloud", body: "Connect a repository and get a link.", href: site.arkcloudUrl, primary: true },
+  { title: "Ark Cloud for a class or team", body: "We'll help you set it up.", href: contactHref("ark") },
+  { title: "Join a waiting list", body: "OmniArk, Pillar and OWL.", href: "/contact" },
+  { title: "Ask a question", body: "About anything we make.", href: contactHref("general") },
 ];
 ---
 

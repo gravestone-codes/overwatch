@@ -8,8 +8,7 @@ export const site = {
   phone: "+250 789 567 629",
   phoneHref: "tel:+250789567629",
   trialDays: 30,
-  // Customer accounts belong to the company, not to one product: every product site's
-  // "Sign in" leads here. Until accounts open, the page says how to reach us.
+  // Sign in: Ark Cloud has its own accounts; the page points there and says how to reach us for the rest.
   signInUrl: "/sign-in",
   // OmniArk has its own site; every "OmniArk" link on this one points there.
   omniarkUrl: "https://omniark.app",
@@ -19,50 +18,44 @@ export const site = {
   pillarUrl: "https://pillar.overwatchlabs.dev",
 };
 
-export type Intent = "demo" | "trial" | "quote" | "cloud" | "owl" | "services" | "general";
+export type Intent = "omniark" | "pillar" | "owl" | "cloud" | "ark" | "general";
 
 export const intents: Record<Intent, { label: string; title: string; lede: string; submit: string }> = {
-  demo: {
-    label: "Book a demo",
-    title: "See OmniArk on your own systems",
-    lede: "A 30-minute walkthrough with an engineer, built around what you run and what you can't afford to lose.",
-    submit: "Book my demo",
-  },
-  trial: {
-    label: "Start free trial",
-    title: `Try OmniArk free for ${site.trialDays} days`,
-    lede: "Full product, no credit card. We help you set it up remotely, and you keep every backup you make.",
-    submit: "Start my trial",
-  },
-  quote: {
-    label: "Get a quote",
-    title: "Get a quote for your organisation",
-    lede: "Tell us roughly what you protect. You will usually have a clear price within one working day.",
-    submit: "Get my quote",
-  },
-  cloud: {
-    label: "Hear when the off-site copy opens",
-    title: "Hear first when OmniArk's off-site copy opens",
-    lede: "An off-site copy for OmniArk, protecting your backups in our data centre, is in development. Leave your details and we'll tell you when it opens.",
-    submit: "Notify me",
-  },
-  owl: {
-    label: "Hear when OWL opens",
-    title: "Hear first when OWL opens",
-    lede: "OWL, configuration backup and compliance for your network, is in development. Leave your details and we'll tell you when it opens.",
-    submit: "Notify me",
-  },
-  services: {
-    label: "Talk to an engineer",
-    title: "Installation and managed backup",
-    lede: "Our technicians can set OmniArk up for you, or run your entire backup operation under your licence.",
-    submit: "Send request",
-  },
   general: {
-    label: "Contact us",
+    label: "Ask a question",
     title: "Talk to Overwatch Labs",
     lede: "Questions about our products or services. A real person usually replies within one working day.",
     submit: "Send message",
+  },
+  ark: {
+    label: "Ark Cloud for a class or team",
+    title: "Ark Cloud for your class or team",
+    lede: "Tell us what you're teaching or building, and an engineer will help you set it up.",
+    submit: "Send request",
+  },
+  omniark: {
+    label: "OmniArk waiting list",
+    title: "Join the OmniArk waiting list",
+    lede: "Backup and recovery on your own premises. Leave your details and we'll tell you as soon as it opens.",
+    submit: "Join the waiting list",
+  },
+  pillar: {
+    label: "Pillar waiting list",
+    title: "Join the Pillar waiting list",
+    lede: "Rooms, restaurant, bar and events on one system, hosted by us. Leave your details and we'll tell you as soon as it opens.",
+    submit: "Join the waiting list",
+  },
+  owl: {
+    label: "OWL waiting list",
+    title: "Join the OWL waiting list",
+    lede: "Configuration backup and compliance for your network. Leave your details and we'll tell you as soon as it opens.",
+    submit: "Join the waiting list",
+  },
+  cloud: {
+    label: "Off-site copy waiting list",
+    title: "Join the waiting list for OmniArk's off-site copy",
+    lede: "A protected copy of your OmniArk backups in our data centre. Leave your details and we'll tell you when it opens.",
+    submit: "Join the waiting list",
   },
 };
 

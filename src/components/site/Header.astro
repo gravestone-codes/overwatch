@@ -1,6 +1,6 @@
 ---
 import { products, companyLinks, offsite } from "@/data/company";
-import { site, contactHref } from "@/data/site";
+import { site } from "@/data/site";
 
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const here = (href: string) => (path === href || path.startsWith(href + "/") ? "page" : undefined);
@@ -43,7 +43,7 @@ const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopene
                             <strong>
                               {p.name}
                               {p.external && <svg width="13" height="13" aria-hidden="true"><use href="#out"></use></svg>}
-                              {!p.available && <span class="label soon">In development</span>}
+                              {!p.available && <span class="label soon">Waiting list</span>}
                             </strong>
                             <small>{p.short}</small>
                           </span>
@@ -54,7 +54,7 @@ const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopene
                             <span class="mark c-oa">+</span>
                             <span>
                               <strong>{offsite.name}</strong>
-                              <small>An OmniArk add-on, in development</small>
+                              <small>An OmniArk add-on, on the waiting list</small>
                             </span>
                           </a>
                         )}
@@ -104,7 +104,7 @@ const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopene
         <svg class="i-sun" width="16" height="16" aria-hidden="true"><use href="#sun"></use></svg>
       </button>
       <a class="nav-link" href={site.signInUrl}>Sign in</a>
-      <a class="btn btn-solid btn-sm" href={contactHref("demo")}>Book a demo</a>
+      <a class="btn btn-solid btn-sm" href="/contact">Contact us</a>
       <button class="menu-btn" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Open menu"><i></i><i></i></button>
     </div>
   </div>
@@ -118,7 +118,7 @@ const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopene
             <span>
               {p.name}
               <small>{p.short}</small>
-              {!p.available && <small class="label menu-soon">In development</small>}
+              {!p.available && <small class="label menu-soon">Waiting list</small>}
             </span>
           </a>
         ))
@@ -127,8 +127,8 @@ const ext = (external: boolean) => (external ? { target: "_blank", rel: "noopene
       {companyLinks.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
     <div class="mnav-actions">
-      <a class="btn btn-solid" href={contactHref("demo")}>Book a demo</a>
-      <a class="btn btn-line" href={contactHref("quote")}>Get a quote</a>
+      <a class="btn btn-solid" href="/contact">Contact us</a>
+      <a class="btn btn-line" href="/contact">Join a waiting list</a>
       <a class="mnav-signin" href={site.signInUrl}>Sign in</a>
     </div>
     <div class="mnav-theme">

@@ -4,9 +4,9 @@ import PageHead from "@/components/site/PageHead.astro";
 import { site } from "@/data/site";
 ---
 
-<Site title="Sign in" description="One Overwatch Labs account for every product." noindex>
-  <PageHead title="Accounts open soon." lede="One account for every Overwatch Labs product, with your licences, trials and downloads. Until then, our engineers handle them for you.">
-    <a class="btn btn-solid" href={`mailto:${site.email}`}>Email us</a>
-    <a class="btn btn-line" href={site.phoneHref}>Call {site.phone}</a>
+<Site title="Sign in" description="Sign in to Overwatch Labs products." noindex>
+  <PageHead title="Sign in." lede="Ark Cloud accounts are open. OmniArk, Pillar and OWL have waiting lists, and their accounts open with them.">
+    <a class="btn btn-solid" href={`${site.arkcloudUrl}/login`}>Sign in to Ark Cloud</a>
+    <a class="btn btn-line" href={`mailto:${site.email}`}>Email us</a>
   </PageHead>
 </Site>

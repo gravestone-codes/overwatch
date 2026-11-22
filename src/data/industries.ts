@@ -1,3 +1,5 @@
+import type { ProductKey } from "./company";
+
 export type Industry = {
   slug: string;
   name: string;
@@ -6,8 +8,8 @@ export type Industry = {
   short: string;
   /** One line for the industries table: what matters most there. */
   matters: string;
-  /** Besides OmniArk, what's in development that this sector will use: OmniArk's off-site copy, or OWL. */
-  next: "offsite" | "ow";
+  /** Our products for this sector, each with one line on what it does there. Available products are listed first wherever they appear. */
+  offer: { key: ProductKey | "offsite"; line: string; /** A page on the product's site made for this sector. */ href?: string }[];
   icon: "Hospital" | "Landmark" | "Building" | "GraduationCap" | "Store";
   title: string;
   lede: string;
@@ -23,7 +25,10 @@ export const industries: Industry[] = [
     name: "Hospitals and clinics",
     row: "Hospitals and clinics",
     matters: "Patient records and imaging, safe from ransomware and failing servers.",
-    next: "offsite",
+    offer: [
+      { key: "oa", line: "Keep patient records, lab results and imaging safe from ransomware and failing servers." },
+      { key: "offsite", line: "A protected copy of your backups in our data centre, out of reach of your network." },
+    ],
     short: "Healthcare",
     icon: "Hospital",
     title: "Patient records that survive anything.",
@@ -62,7 +67,10 @@ export const industries: Industry[] = [
     name: "Banks and financial services",
     row: "Banks and financial services",
     matters: "Core systems protected, and network compliance you can show a regulator.",
-    next: "ow",
+    offer: [
+      { key: "oa", line: "Immutable backups, insider protection and recovery evidence your auditors accept." },
+      { key: "ow", line: "Every network change tracked, and compliance you can show a regulator." },
+    ],
     short: "Finance",
     icon: "Landmark",
     title: "Recovery your regulator can verify.",
@@ -101,7 +109,10 @@ export const industries: Industry[] = [
     name: "Government and public institutions",
     row: "Government and public institutions",
     matters: "Registries and public services that keep running, with records you can verify.",
-    next: "ow",
+    offer: [
+      { key: "oa", line: "Sovereign, air-gapped backups that keep citizen data under your control." },
+      { key: "ow", line: "Every network change tracked, and compliance you can show a regulator." },
+    ],
     short: "Government",
     icon: "Building",
     title: "Public records, protected at home.",
@@ -139,12 +150,16 @@ export const industries: Industry[] = [
     slug: "education",
     name: "Schools and universities",
     row: "Schools and universities",
-    matters: "Student records and finances, safe through exams and admissions.",
-    next: "offsite",
+    matters: "Student records safe through exams, and a cloud platform for teaching code.",
+    offer: [
+      { key: "ac", line: "Classrooms with starter projects and deadlines. Students push their code and get a live link, from any laptop.", href: "https://arkcloud.online/education" },
+      { key: "oa", line: "Protect marks, transcripts and finance systems on an education budget." },
+      { key: "offsite", line: "A protected copy of your backups in our data centre, so one fire or theft can't take everything." },
+    ],
     short: "Education",
     icon: "GraduationCap",
-    title: "Years of student records, never lost.",
-    lede: "Marks, transcripts, admissions and fees. OmniArk protects the systems a school runs on, at a price that fits an education budget, and trains your IT team to run it.",
+    title: "Teach code, and keep every record.",
+    lede: "Ark Cloud gives every student a live link for their code, from any laptop. OmniArk, on its waiting list, will protect the marks, transcripts and fees a school runs on.",
     card: "Protect marks, transcripts and finance systems on an education budget.",
     badDay: {
       without: [
@@ -178,12 +193,16 @@ export const industries: Industry[] = [
     slug: "business",
     name: "Businesses",
     row: "Businesses of every size",
-    matters: "Files, finance systems and email that come back without stopping the work.",
-    next: "offsite",
+    matters: "Files and finance systems that come back after a bad day, and your website and apps online.",
+    offer: [
+      { key: "ac", line: "Your website, shop and internal tools online. Push your code and get a link." },
+      { key: "oa", line: "Backup and recovery for your accounts, orders and customer files, without the enterprise bill." },
+      { key: "offsite", line: "A protected copy of your backups in our data centre, run by us." },
+    ],
     short: "Business",
     icon: "Store",
-    title: "Your business keeps running.",
-    lede: "Accounts, orders, customer files. One bad day shouldn't close your doors. OmniArk gives growing businesses enterprise-grade protection without the enterprise bill.",
+    title: "Online today, and ready for a bad day.",
+    lede: "Put your website, shop and tools online with Ark Cloud today. OmniArk, on its waiting list, will keep your accounts, orders and customer files safe when a server fails.",
     card: "Enterprise-grade backup and recovery without the enterprise bill.",
     badDay: {
       without: [
@@ -215,7 +234,28 @@ export const industries: Industry[] = [
   },
 ];
 
-const order = ["business", "finance", "healthcare", "government", "education"];
+const order = ["business", "education", "finance", "healthcare", "government"];
 industries.sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug));
+
+// Sectors served by one product with no industry page of their own: the row goes straight to the product's site.
+// `after` places the row in the industries table.
+export const moreSectors: { name: string; short: string; matters: string; product: ProductKey; href: string; after: string }[] = [
+  {
+    name: "Developers and startups",
+    short: "Developers",
+    matters: "Push to GitHub and get a link, with databases and storage a click away.",
+    product: "ac",
+    href: "https://arkcloud.online",
+    after: "business",
+  },
+  {
+    name: "Hotels and restaurants",
+    short: "Hospitality",
+    matters: "Rooms, restaurant, bar and events on one system, and one bill.",
+    product: "pl",
+    href: "https://pillar.overwatchlabs.dev",
+    after: "education",
+  },
+];
 
 export const industryBySlug = (slug: string) => industries.find((i) => i.slug === slug);
